@@ -52,8 +52,6 @@ var f_root;
 
 var m_account = "waiting for web3";
 
-var t_now = Math.round((new Date()).getTime() / 1000);
-
 var doc_contractBalance = document.getElementById('contractbalance');
 var doc_gameRound = document.getElementById('gameround');
 var doc_roundPot = document.getElementById('roundpot');
@@ -154,6 +152,7 @@ function formatEthValue2(ethstr){
 /* CALCULATIONS */
 
 function computeLastRootPlant(){
+	var _now = Math.round((new Date()).getTime() / 1000);
 	var _timeSinceLast = parseFloat(_now - a_lastRootPlant);
 	
 	var	_numhours = Math.floor(_timeSinceLast / 3600);
