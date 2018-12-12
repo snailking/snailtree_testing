@@ -68,7 +68,12 @@ var doc_fieldroot = document.getElementById('fieldRoot');
 
 /* UPDATE */
 
-function updateEverything(){
+function initUpdate(){
+	slowUpdate();
+	fastUpdate();
+}	
+
+function slowUpdate(){
 	updateEthAccount();
 	updateContractBalance();
 	updateGameRound();
@@ -84,9 +89,13 @@ function updateEverything(){
 	updatePlayerTree();
 	updatePlayerPecan();
 	//updatePlayerClaim();
-	updateField();
 	updateText();
-	setTimeout(updateEverything, 4000);
+	setTimeout(slowUpdate, 4000);
+}
+
+function fastUpdate(){
+	updateField();
+	setTimeout(fastUpdate, 200);
 }
 
 //Updates all text from web3 calls
