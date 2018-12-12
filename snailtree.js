@@ -161,7 +161,7 @@ function computeLastRootPlant(){
 		_plantString = _numhours + " hours and " + _numminutes + " minutes ago";
 	} else if(_numminutes > 0) {
 		_plantString = _numminutes + " minutes ago";
-	} else
+	} else {
 		_plantString = "less than a minute ago";
 	}
 	
