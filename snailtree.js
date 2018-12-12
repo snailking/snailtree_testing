@@ -65,7 +65,7 @@ function updateEverything(){
 	updatePlayerRound();
 	updatePlayerTree();
 	updatePlayerPecan();
-	updatePlayerClaim();
+	//updatePlayerClaim();
 	updateText();
 	setTimeout(updateEverything, 4000);
 }
@@ -98,7 +98,7 @@ function updateText(){
 	doc_playerRound.innerHTML = a_playerRound;
 	doc_playerTree.innerHTML = a_playerTree;
 	doc_playerPecan.innerHTML = a_playerPecan;
-	doc_playerLastClaim.innerHTML = a_playerLastClaim;
+	//doc_playerLastClaim.innerHTML = a_playerLastClaim;
 }
 
 /* WEB3 CALLS */
@@ -200,13 +200,6 @@ function updatePlayerPecan(){
 		a_playerPecan = result;
 	});
 }		
-
-//Last claim for player
-function updatePlayerClaim(){
-	lastClaim(m_account, function(result) {
-		a_playerClaim = result;
-	});
-}	
 
 /* WEB3 TRANSACTIONS */
 
