@@ -1,0 +1,159 @@
+p {
+	margin: 0px;
+	padding: 0px;
+}
+
+body {
+	background-image: url("img/forest_bg.jpg");
+	background-color: #49633c;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-attachment: fixed;
+}
+
+
+.jumbotron {
+	background-color: #6c855d; /*#e8e6b6;*/
+	position: center;
+	margin-left: auto;
+	margin-right: auto;
+	border: 4px solid transparent;
+	border-image: url("img/brick.png") 30 round;
+	padding: 1rem 1rem;
+	margin-bottom: 0.5rem;
+	border-radius: 0.2rem;
+}
+
+@media (min-width: 576px) {
+  .jumbotron {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .jumbotron {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .jumbotron{
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .jumbotron{
+    max-width: 1140px;
+  }
+}
+
+.container-beige {
+	background-color: #e8e6b6;
+	color: black;
+	position: center;
+	border: 4px solid transparent;
+	border-image: url("img/brick.png") 30 round;
+	padding: 0.5rem 0.5rem;
+	margin: 1rem;
+}
+
+.black-shadow {
+	color: white;
+	text-shadow:
+	-1px -1px 0 #000,  
+	1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+.scroll-box {
+	width: 100%; 
+	overflow: auto; 
+	overflow-x: hidden; 
+	height: 110px;
+}
+
+.druid-img {
+	background-image: url("img/druid_o50.png");
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.snail-img {
+	background-image: url("img/snail_o50.png");
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.egg-img {
+	background-image: url("img/egg_o50.png");
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.red-img {
+	background-image: url("img/red_o50.png");
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.acorn-img {
+	background-image: url("img/acorn_o50.png");
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.throne-img {
+	background-image: url("img/throne_o50.png");
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.btn {
+	border: 4px solid transparent;
+	border-image: url("img/brick.png") 30 round;
+	margin: 2px;
+	background-color: #b7a575;
+}
+
+.leader-style {
+	font-size: 1.25rem;
+}
+
+/* Modal (from W3Schools) */
+.modal {
+    display: block; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 200px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    width: 100%;
+	max-width: 960px;
+}
+
+/* The Close Button */
+.close {
+    font-size: 16px;
+    font-weight: bold;
+	color: white;
+	vertical-align: text-top;
+    float: right;
+}
+
+.close:hover,
+.close:focus {
+    color: gray;
+    text-decoration: none;
+    cursor: pointer;
+}
