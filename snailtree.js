@@ -106,7 +106,8 @@ function slowUpdate(){
 
 function fastUpdate(){
 	updateField();
-	setTimeout(fastUpdate, 200);
+	fastupdateRootPecan();
+	setTimeout(fastUpdate, 100);
 }
 
 //Updates all text from web3 calls
@@ -172,6 +173,40 @@ function computePecanLeft(){
 	a_pecanLeft = parseFloat(a_pecanToWin - a_pecanGiven).toFixed(0);
 }
 
+/* FAST LOCAL UPDATES */
+function fastupdateRootPecan(){
+	var _now = new Date().getTime();
+	var _timeSinceLastMs = parseFloat(_now) - parseFloat(a_lastRootPlant * 1000);
+	var _boostFactor = parseFloat((_timeSinceLastMs * 0.005) + parseFloat(1));
+	var _reward = _boostFactor / 0.0005 / 1000;
+	a_rootPecanForOneEther = _reward;
+}
+	
+function ComputePlantBoostFactor() public view returns(uint256) {
+        
+        //Get time since last global plant
+        uint256 _timeLapsed = now.sub(lastRootPlant);
+        
+        //Compute boostFactor (starts at 1000, +5 per second)
+        uint256 _boostFactor = (_timeLapsed.mul(5)).add(1000);
+        return _boostFactor;
+    }
+    
+    // ComputePlantPecan
+    // Returns Pecan reward for a given buy
+    // 2000 pecan per ETH, multiplied by global boost
+    
+    function ComputePlantPecan(uint256 _msgValue) public view returns(uint256) {
+
+        //Get boostFactor
+        uint256 _treeBoostFactor = ComputePlantBoostFactor();
+        
+        //Compute reward 
+        uint256 _reward = _msgValue.mul(_treeBoostFactor).div(TREE_SIZE_COST).div(1000);
+        return _reward;
+    }
+	
+	
 /* WEB3 CALLS */
 
 //Current ETH address in use
