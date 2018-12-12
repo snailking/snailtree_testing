@@ -238,7 +238,7 @@ function webGivePecan(){
 //Plant root
 function webPlantRoot(){
 	var weitospend = web3.toWei(f_root,'ether');
-	PlantRoot(f_root, function(){
+	PlantRoot(weitospend, function(){
 	});
 }
 
