@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<!-- Title, Favicon -->
+		<title>SnailTree Testing</title>
+		<link rel="shortcut icon" href="favicon.png" type="image/x-icon">		
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="theme_bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="theme_animista.css">
+		<link rel="stylesheet" type="text/css" href="theme_snailtree.css">		
+	</head>
+	
+	<body>
+		<!-- TITLE STUFF -->
+		<div align="center" class="jumbotron">
+			<h1>SNAILTREE TESTING</h1> 
+			<h2>A Tale of Madness and Hubris</h2>
+			<a href="https://etherscan.io/address/0x2A185c995373a766979E645D0912d30E27aa56f6" target="_blank"><img height="48" src="img/contract_circle.png"></a>
+			<a href="https://discord.gg/8h3Emyb" target="_blank"><img height="48" src="img/discord_circle.png"></a>
+			<a href="https://twitter.com/EtherSnailFarm" target="_blank"><img height="48" src="img/twitter_circle.png"></a>
+			<a href="https://reddit.com/r/snailthrone" target="_blank"><img height="48" src="img/reddit_circle.png"></a>
+			<a href="https://medium.com/@thesnailking/snailfarm-3-competitive-idlegame-on-ethereum-3fe32bf774c7" target="_blank"><img height="48" src="img/medium_circle.png"></a>
+			<div class="container-beige">
+				<h5 align="left"> There once was a Squirrel from the Forest,</h5>
+				<h5 align="right">who, simply put, wasn't the smartest.</h5>
+				<h5 align="left">One day, he saw Snails building a Throne, </h5>
+				<h5 align="right">and thought "this is easy, I'm as good as anyone!"</h5>
+				<h5 align="left">His mind set, the Squirrel began, </h5>
+				<h5 align="right">instead of shell, he would use pecan</h5>
+				<h5 align="left">Come along, Ethertree SnailFarmers, </h5>
+				<h5 align="right">trade your harvest to the mad Wonkers.</h5>
+			</div>
+		</div>
+		<!-- MAIN STUFF -->
+		<div class="jumbotron">
+			<h3>Actions!</h3>
+			<div class="container-beige" align="center">
+				<div class="row">
+					<div class="col-sm">
+						<button class="btn btn-lg btn-success" onclick="webGivePecan()">GIVE PECAN</button><input type="text" id="fieldPecan" value="1" size="6">
+					</div>
+					<div class="col-sm">
+						<button class="btn btn-lg btn-success" onclick="webPlantRoot()">PLANT ROOT</button><input type="text" id="fieldRoot" value="0.02" size="4">
+					</div>
+					<div class="col-sm">
+						<button class="btn btn-lg btn-success" onclick="webGrowTree()">GROW TREE</button>
+					</div>
+				</div><br><br>
+				<div class="row">
+					<div class="col-sm">
+						<button class="btn btn-lg btn-success" onclick="webClaimShare()">CLAIM SHARE</button>
+					</div>
+					<div class="col-sm">
+						<button class="btn btn-lg btn-success" onclick="webWithdrawBalance()">WITHDRAW BALANCE</button>
+					</div>
+					<div class="col-sm">
+						<button class="btn btn-lg btn-success" onclick="webPayThrone()">PAY THRONE</button>
+					</div>
+				</div>
+			</div>
+			<h3>Game Stuff</h3>
+			<div class="container-beige">
+				<h5>Contract Balance: <span id="contractbalance">?</span></h5>
+				<h5>Game Round: <span id="gameround">?</span></h5>
+				<h5>RoundPot: <span id="roundpot">?</span></h5>
+				<h5>TreePot: <span id="treepot">?</span></h5>
+				<h5>WonkPot: <span id="wonkpot">?</span></h5>
+				<h5>ThronePot: <span id="thronepot">?</span></h5>
+				<h5>JackPot: <span id="jackpot">?</span></h5>
+				<h5>Pecans to Win: <span id="pecantowin">?</span></h5>
+				<h5>Pecans Given: <span id="pecangiven">?</span></h5>
+				<h5>Last Root Planted: <span id="lastrootplant">?</span></h5>
+				<h5>Pecans received for 1ETH buy: <span id="rootpecanforoneether">?</span></h5>
+			</div>
+			<h3>My Stuff</h3>
+			<div class="container-beige">
+				<h5>Player Balance: <span id="playerbalance">?</span></h5>
+				<h5>Player Round: <span id="playerround">?</span></h5>
+				<h5>Player Tree Size: <span id="playertree">?</span></h5>
+				<h5>Player Pecan: <span id="playerpecan">?</span></h5>
+				<h5>Player Ether Share: <span id="playerethershare">?</span></h5>
+				<h5>Player Pecan Share: <span id="playerpecanshare">?</span></h5>
+				<!--<h5>Last Player Claim: <span id="playerlastclaim">?</span></h5> NEED GETTER -->
+			</div>
+		</div>
+		<script src="snailtree_1.js"></script>				
+		<script>
+			initUpdate();
+		</script>		
+	</body>
+</html>
