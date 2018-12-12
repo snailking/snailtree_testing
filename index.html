@@ -14,6 +14,7 @@
 	</head>
 	
 	<body>
+		<!-- TITLE STUFF -->
 		<div align="center" class="jumbotron">
 			<h1>SNAILTREE TESTING</h1> 
 			<h2>A Tale of Madness and Hubris</h2>
@@ -33,7 +34,33 @@
 				<h5 align="right">trade your harvest to the mad Wonkers.</h5>
 			</div>
 		</div>
+		<!-- MAIN STUFF -->
 		<div class="jumbotron">
+			<h3>Actions!</h3>
+			<div class="container-beige" align="center">
+				<div class="row">
+					<div class="col-sm">
+						<button class="btn btn-lg btn-success" onclick="webGivePecan()">GIVE PECAN</button><input type="text" id="fieldPecan" value="1" size="6">
+					</div>
+					<div class="col-sm">
+						<button class="btn btn-lg btn-success" onclick="webPlantRoot()">PLANT ROOT</button><input type="text" id="fieldRoot" value="0.02" size="4">
+					</div>
+					<div class="col-sm">
+						<button class="btn btn-lg btn-success" onclick="webGrowTree()">GROW TREE</button>
+					</div>
+				</div><br><br>
+				<div class="row">
+					<div class="col-sm">
+						<button class="btn btn-lg btn-success" onclick="webClaimShare()">CLAIM SHARE</button>
+					</div>
+					<div class="col-sm">
+						<button class="btn btn-lg btn-success" onclick="webWithdrawBalance()">WITHDRAW BALANCE</button>
+					</div>
+					<div class="col-sm">
+						<button class="btn btn-lg btn-success" onclick="webPayThrone()">PAY THRONE</button>
+					</div>
+				</div>
+			</div>
 			<h3>Game Stuff</h3>
 			<div class="container-beige">
 				<h5>Contract Balance: <span id="contractbalance">?</span></h5>

@@ -43,6 +43,9 @@ var a_playerTree;
 var a_playerPecan;
 var a_playerLastClaim;
 
+var f_pecan;
+var f_root;
+
 var m_account = "waiting for web3";
 
 var doc_contractBalance = document.getElementById('contractbalance');
@@ -60,7 +63,8 @@ var doc_playerRound = document.getElementById('playerround');
 var doc_playerTree = document.getElementById('playertree');
 var doc_playerPecan = document.getElementById('playerpecan');
 //var doc_playerLastClaim = document.getElementById('playerlastclaim');
-
+var doc_fieldpecan = document.getElementById('fieldPecan');
+var doc_fieldroot = document.getElementById('fieldRoot');
 
 /* UPDATE */
 
@@ -80,20 +84,9 @@ function updateEverything(){
 	updatePlayerTree();
 	updatePlayerPecan();
 	//updatePlayerClaim();
+	updateField();
 	updateText();
 	setTimeout(updateEverything, 4000);
-}
-
-/* STANDARD FUNCTIONS */
-
-//Truncates ETH value to 3 decimals
-function formatEthValue(ethstr){
-    return parseFloat(parseFloat(ethstr).toFixed(3));
-}
-
-//Truncates ETH value to 6 decimals
-function formatEthValue2(ethstr){
-	return parseFloat(parseFloat(ethstr).toFixed(6));
 }
 
 //Updates all text from web3 calls
@@ -114,6 +107,25 @@ function updateText(){
 	doc_playerPecan.innerHTML = a_playerPecan;
 	//doc_playerLastClaim.innerHTML = a_playerLastClaim;
 }
+
+function updateField(){
+	f_pecan = document.getElementById('fieldPecan').value;
+	f_root = document.getElementById('fieldRoot').value;
+}
+
+/* UTILITIES */
+
+//Truncates ETH value to 3 decimals
+function formatEthValue(ethstr){
+    return parseFloat(parseFloat(ethstr).toFixed(3));
+}
+
+//Truncates ETH value to 6 decimals
+function formatEthValue2(ethstr){
+	return parseFloat(parseFloat(ethstr).toFixed(6));
+}
+
+
 
 /* WEB3 CALLS */
 
@@ -217,6 +229,42 @@ function updatePlayerPecan(){
 
 /* WEB3 TRANSACTIONS */
 
+//Give pecan
+function webGivePecan(){
+	GivePecan(f_pecan, function(){
+	});
+}
+
+//Plant root
+function webPlantRoot(){
+	var weitospend = web3.toWei(f_root,'ether');
+	PlantRoot(f_root, function(){
+	});
+}
+
+//Grow tree
+function webGrowTree(){
+	GrowTree(function(){
+	});
+}
+
+//Claim share
+function webClaimShare(){
+	ClaimShare(function(){
+	});
+}
+
+//Withdraw balance
+function webWithdrawBalance(){
+	WithdrawBalance(function(){
+	});
+}
+
+//Pay Throne
+function webPayThrone(){
+	PayThrone(function(){
+	});
+}
 
 
 /* CONTRACT ABI */
