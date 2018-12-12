@@ -36,12 +36,16 @@ var a_thronePot;
 var a_jackPot;
 var a_pecanToWin;
 var a_pecanGiven;
+var a_pecanLeft;
 var a_lastRootPlant;
 var a_playerBalance;
 var a_playerRound;
 var a_playerTree;
 var a_playerPecan;
 var a_playerLastClaim;
+var a_playerEtherShare;
+var a_playerPecanShare;
+var a_rootPecanForOneEther;
 
 var f_pecan;
 var f_root;
@@ -62,9 +66,13 @@ var doc_playerBalance = document.getElementById('playerbalance');
 var doc_playerRound = document.getElementById('playerround');
 var doc_playerTree = document.getElementById('playertree');
 var doc_playerPecan = document.getElementById('playerpecan');
+var	doc_playerEtherShare = document.getElementById('playerethershare');
+var	doc_playerPecanShare = document.getElementById('playerpecanshare');
+var	doc_rootPecanForOneEther = document.getElementById('rootpecanforoneether');
 //var doc_playerLastClaim = document.getElementById('playerlastclaim');
 var doc_fieldpecan = document.getElementById('fieldPecan');
 var doc_fieldroot = document.getElementById('fieldRoot');
+
 
 /* UPDATE */
 
@@ -88,6 +96,9 @@ function slowUpdate(){
 	updatePlayerRound();
 	updatePlayerTree();
 	updatePlayerPecan();
+	updatePlayerEtherShare();
+	updatePlayerPecanShare();
+	updateRootPecan();
 	//updatePlayerClaim();
 	updateText();
 	setTimeout(slowUpdate, 4000);
@@ -115,6 +126,9 @@ function updateText(){
 	doc_playerTree.innerHTML = a_playerTree;
 	doc_playerPecan.innerHTML = a_playerPecan;
 	//doc_playerLastClaim.innerHTML = a_playerLastClaim;
+	doc_playerEtherShare.innerHTML = a_playerEtherShare;
+	doc_playerPecanShare.innerHTML = a_playerPecanShare;
+	doc_rootPecanForOneEther.innerHTML = a_rootPecanForOneEther;
 }
 
 function updateField(){
@@ -142,19 +156,20 @@ function computeLastRootPlant(){
 	var	_numhours = Math.floor(_timeSinceLast / 3600);
 	var _numminutes = Math.floor((_timeSinceLast % 3600) / 60);
 	var _numseconds = (_timeSinceLast % 3600) % 60;
-				
-	if(_numseconds < 10) {
-		_numseconds = "0" + _numseconds;
+	var _plantString = "";			
+	if(_numhours > 0) {
+		_plantString = _numhours + " hours and " + _numminutes + " minutes ago";
+	} else if(_numminutes > 0) {
+		_plantString = _numminutes + " minutes ago";
+	} else
+		_plantString = "less than a minute ago";
 	}
-	if(_numminutes < 10) {
-		_numminutes = "0" + _numminutes;
-	}
-	if(_numhours < 10) {
-		_numhours = "0" + _numhours;
-	}
-	var _plantString = _numhours + ":" + _numminutes + ":" + _numseconds;
 	
 	return _plantString;		
+}
+
+function computePecanLeft(){
+	a_pecanLeft = parseFloat(a_pecanToWin - a_pecanGiven).toFixed(0);
 }
 
 /* WEB3 CALLS */
@@ -256,6 +271,28 @@ function updatePlayerPecan(){
 		a_playerPecan = result;
 	});
 }		
+
+//Compute EtherShare
+function updatePlayerEtherShare(){
+	ComputeEtherShare(m_account, function(result) {
+		a_playerEtherShare = parseFloat(web3.fromWei(result,'ether')).toFixed(10);
+	});
+}
+
+//Compute PecanShare
+function updatePlayerPecanShare(){
+	ComputePecanShare(m_account, function(result) {
+		a_playerPecanShare = result;
+	});
+}
+
+//Compute PlantPecan
+function updateRootPecan(){
+	var weitospend =  web3.toWei(1,'ether');
+	ComputePlantPecan(weitospend, function(result) {
+		a_rootPecanForOneEther = result;
+	});
+}
 
 /* WEB3 TRANSACTIONS */
 
