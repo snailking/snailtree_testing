@@ -10,16 +10,16 @@ window.addEventListener("load", function() {
         web3.version.getNetwork(function(error, result) {
             if (!error) {
                 if (result == "3") {
-					console.log("Mainnet successfully loaded!");
+					//console.log("Mainnet successfully loaded!");
                 } else {
-                    console.log("You must be on the Testnet to play SnailFarm 3!");
+                    //console.log("You must be on the Testnet to play SnailFarm 3!");
 					web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/f423492af8504d94979d522c3fbf3794"));
 					//modal2.style.display = "block";
                 }
             }
         });
     } else {
-        console.log("Web3 library not found.");
+        //console.log("Web3 library not found.");
 		//modal2.style.display = "block";
         web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/f423492af8504d94979d522c3fbf3794"));
     }
@@ -178,6 +178,7 @@ function computePecanLeft(){
 function fastupdateRootPecan(){
 	var _now = (new Date).getTime();
 	var _timeSinceLastMs = parseFloat(_now) - parseFloat(a_lastRootPlant * 1000);
+	console.log(_timeSinceLastMs);
 	var _boostFactor = parseFloat((_timeSinceLastMs * 0.005) + parseFloat(1));
 	var _reward = _boostFactor / 0.0005 / 1000;
 	a_rootPecanForOneEther = _reward;
@@ -355,11 +356,11 @@ function ClaimShare(callback){
     var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('ClaimShare ',result);
+            //console.log('ClaimShare ',result);
             callback(result)
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -372,11 +373,11 @@ function GivePecan(_pecanGift,callback){
     var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('GivePecan ',result);
+            //console.log('GivePecan ',result);
             callback(result)
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -389,11 +390,11 @@ function GrowTree(callback){
     var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('GrowTree ',result);
+            //console.log('GrowTree ',result);
             callback(result)
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -406,11 +407,11 @@ function PayThrone(callback){
     var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('PayThrone ',result);
+            //console.log('PayThrone ',result);
             callback(result)
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -423,11 +424,11 @@ function PlantRoot(eth,callback){
     var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData,value: eth},
     function(error,result){
         if(!error){
-            console.log('PlantRoot ',result);
+            //console.log('PlantRoot ',result);
             callback(result)
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -440,11 +441,11 @@ function WithdrawBalance(callback){
     var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('WithdrawBalance ',result);
+            //console.log('WithdrawBalance ',result);
             callback(result)
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -457,11 +458,11 @@ function ComputeEtherShare(adr,callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('ComputeEtherShare ',web3.toDecimal(result));
+            //console.log('ComputeEtherShare ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -474,11 +475,11 @@ function ComputePecanShare(adr,callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('ComputePecanShare ',web3.toDecimal(result));
+            //console.log('ComputePecanShare ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -491,11 +492,11 @@ function ComputePecanToWin(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('ComputePecanToWin ',web3.toDecimal(result));
+            //console.log('ComputePecanToWin ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -508,11 +509,11 @@ function ComputePlantBoostFactor(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('ComputePlantBoostFactor ',web3.toDecimal(result));
+            //console.log('ComputePlantBoostFactor ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -525,11 +526,11 @@ function ComputePlantPecan(_msgValue,callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('ComputePlantPecan ',web3.toDecimal(result));
+            //console.log('ComputePlantPecan ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -542,11 +543,11 @@ function ComputeShareBoostFactor(adr,callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('ComputeShareBoostFactor ',web3.toDecimal(result));
+            //console.log('ComputeShareBoostFactor ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -559,11 +560,11 @@ function ComputeWonkTrade(_pecanGift,callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('ComputeWonkTrade ',web3.toDecimal(result));
+            //console.log('ComputeWonkTrade ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -576,11 +577,11 @@ function gameRound(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('gameRound ',web3.toDecimal(result));
+            //console.log('gameRound ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -593,11 +594,11 @@ function GetMyBalance(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('GetMyBalance ',web3.toDecimal(result));
+            //console.log('GetMyBalance ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -610,11 +611,11 @@ function GetMyRound(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('GetMyRound ',web3.toDecimal(result));
+            //console.log('GetMyRound ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -627,11 +628,11 @@ function GetPecan(adr,callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('GetPecan ',web3.toDecimal(result));
+            //console.log('GetPecan ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -644,11 +645,11 @@ function GetTree(adr,callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('GetTree ',web3.toDecimal(result));
+            //console.log('GetTree ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -661,11 +662,11 @@ function jackPot(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('jackPot ',web3.toDecimal(result));
+            //console.log('jackPot ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -678,11 +679,11 @@ function lastClaim(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('lastClaim ',web3.toDecimal(result));
+            //console.log('lastClaim ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -695,11 +696,11 @@ function lastRootPlant(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('lastRootPlant ',web3.toDecimal(result));
+            //console.log('lastRootPlant ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -712,11 +713,11 @@ function pecan(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('pecan ',web3.toDecimal(result));
+            //console.log('pecan ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -729,11 +730,11 @@ function PECAN_MIN_WIN(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('PECAN_MIN_WIN ',web3.toDecimal(result));
+            //console.log('PECAN_MIN_WIN ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -746,11 +747,11 @@ function PECAN_WIN_FACTOR(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('PECAN_WIN_FACTOR ',web3.toDecimal(result));
+            //console.log('PECAN_WIN_FACTOR ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -763,11 +764,11 @@ function pecanGiven(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('pecanGiven ',web3.toDecimal(result));
+            //console.log('pecanGiven ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -780,11 +781,11 @@ function pecanToWin(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('pecanToWin ',web3.toDecimal(result));
+            //console.log('pecanToWin ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -797,11 +798,11 @@ function playerBalance(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('playerBalance ',web3.toDecimal(result));
+            //console.log('playerBalance ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -814,11 +815,11 @@ function playerRound(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('playerRound ',web3.toDecimal(result));
+            //console.log('playerRound ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -831,11 +832,11 @@ function REWARD_SIZE_ETH(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('REWARD_SIZE_ETH ',web3.toDecimal(result));
+            //console.log('REWARD_SIZE_ETH ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -848,11 +849,11 @@ function SECONDS_IN_DAY(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('SECONDS_IN_DAY ',web3.toDecimal(result));
+            //console.log('SECONDS_IN_DAY ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -865,11 +866,11 @@ function SECONDS_IN_HOUR(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('SECONDS_IN_HOUR ',web3.toDecimal(result));
+            //console.log('SECONDS_IN_HOUR ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -882,11 +883,11 @@ function SNAILTHRONE(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('SNAILTHRONE ',result);
+            //console.log('SNAILTHRONE ',result);
             callback(result)
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -899,11 +900,11 @@ function thronePot(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('thronePot ',web3.toDecimal(result));
+            //console.log('thronePot ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -916,11 +917,11 @@ function TREE_SIZE_COST(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('TREE_SIZE_COST ',web3.toDecimal(result));
+            //console.log('TREE_SIZE_COST ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -933,11 +934,11 @@ function treePot(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('treePot ',web3.toDecimal(result));
+            //console.log('treePot ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -950,11 +951,11 @@ function treeSize(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('treeSize ',web3.toDecimal(result));
+            //console.log('treeSize ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
@@ -967,11 +968,11 @@ function wonkPot(callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            console.log('wonkPot ',web3.toDecimal(result));
+            //console.log('wonkPot ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
-            console.log('transaction failed with ',error.message)
+            //console.log('transaction failed with ',error.message)
         }
     });
 }
