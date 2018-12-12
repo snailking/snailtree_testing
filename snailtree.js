@@ -109,7 +109,7 @@ function updateText(){
 	doc_jackPot.innerHTML = a_jackPot;
 	doc_pecanToWin.innerHTML = a_pecanToWin;
 	doc_pecanGiven.innerHTML = a_pecanGiven;
-	doc_lastRootPlant.innerHTML = a_lastRootPlant;
+	doc_lastRootPlant.innerHTML = computeLastRootPlant();
 	doc_playerBalance.innerHTML = a_playerBalance;
 	doc_playerRound.innerHTML = a_playerRound;
 	doc_playerTree.innerHTML = a_playerTree;
@@ -134,7 +134,28 @@ function formatEthValue2(ethstr){
 	return parseFloat(parseFloat(ethstr).toFixed(6));
 }
 
-
+/* CALCULATIONS */
+function computeLastRootplant(){
+	var _now = Math.round((new Date()).getTime() / 1000);
+	var _timeSinceLast = parseFloat(_now - a_lastRootPlant);
+	
+	var	_numhours = Math.floor(_timeSinceLast / 3600);
+	var _numminutes = Math.floor((_timeSinceLast % 3600) / 60);
+	var _numseconds = (_timeSinceLast % 3600) % 60;
+				
+	if(_numseconds < 10) {
+		_numseconds = "0" + _numseconds;
+	}
+	if(_numminutes < 10) {
+		_numminutes = "0" + _numminutes;
+	}
+	if(_numhours < 10) {
+		_numhours = "0" + _numhours;
+	}
+	var _plantString = _numhours + ":" + _numminutes + ":" + _numseconds;
+	
+	return _plantString;		
+}
 
 /* WEB3 CALLS */
 
