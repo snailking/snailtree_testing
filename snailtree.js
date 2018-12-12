@@ -135,7 +135,7 @@ function formatEthValue2(ethstr){
 }
 
 /* CALCULATIONS */
-function computeLastRootplant(){
+function computeLastRootPlant(){
 	var _now = Math.round((new Date()).getTime() / 1000);
 	var _timeSinceLast = parseFloat(_now - a_lastRootPlant);
 	
