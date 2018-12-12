@@ -28,6 +28,20 @@ window.addEventListener("load", function() {
 /* VARIABLES */
 
 var a_contractBalance;
+var a_gameRound;
+var a_roundPot;
+var a_treePot;
+var a_wonkPot;
+var a_thronePot;
+var a_jackPot;
+var a_pecanToWin;
+var a_pecanGiven;
+var a_lastRootPlant;
+var a_playerBalance;
+var a_playerRound;
+var a_playerTree;
+var a_playerPecan;
+var a_playerLastClaim;
 
 var m_account = "waiting for web3";
 
@@ -45,7 +59,7 @@ var doc_playerBalance = document.getElementById('playerbalance');
 var doc_playerRound = document.getElementById('playerround');
 var doc_playerTree = document.getElementById('playertree');
 var doc_playerPecan = document.getElementById('playerpecan');
-var doc_playerLastClaim = document.getElementById('playerlastclaim');
+//var doc_playerLastClaim = document.getElementById('playerlastclaim');
 
 
 /* UPDATE */
