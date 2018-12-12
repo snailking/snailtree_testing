@@ -178,9 +178,9 @@ function computePecanLeft(){
 function fastupdateRootPecan(){
 	var _now = (new Date).getTime();
 	var _timeSinceLastMs = parseFloat(_now) - parseFloat(a_lastRootPlant * 1000);
-	var _boostFactor = parseFloat((_timeSinceLastMs * 0.005) + parseFloat(1));
+	var _boostFactor = parseFloat((_timeSinceLastMs * 0.005) + parseFloat(2000));
 	var _reward = _boostFactor / 0.0005 / 1000;
-	a_rootPecanForOneEther = _reward;
+	a_rootPecanForOneEther = parseFloat(_reward).toFixed(0);
 	doc_rootPecanForOneEther.innerHTML = a_rootPecanForOneEther;
 }
 		
