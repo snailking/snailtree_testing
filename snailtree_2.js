@@ -192,8 +192,8 @@ function fastupdateRootPecan(){
 
 function fastupdateEtherShare(){
 	var _millisecondSinceLast = parseFloat(timeNow) - parseFloat(a_playerLastClaim * 1000);
-	var _reward = a_playerTree * _millisecondSinceLast / 1000;
-	a_playerEtherShare = parseFloat(web3.fromWei(_reward, 'ether')).toFixed(8);
+	var _reward = 0.00000002 * a_playerTree * _millisecondSinceLast / 1000;
+	a_playerEtherShare = parseFloat(_reward, 'ether').toFixed(10);
 	doc_playerEtherShare.innerHTML = a_playerEtherShare;
 }
 		
@@ -521,7 +521,7 @@ function ComputeEtherShare(adr,callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            //console.log('ComputeEtherShare ',web3.toDecimal(result));
+            console.log('ComputeEtherShare ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
