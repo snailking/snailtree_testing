@@ -192,7 +192,7 @@ function fastupdateRootPecan(){
 
 function fastupdateEtherShare(){
 	var _millisecondSinceLast = parseFloat(timeNow) - parseFloat(a_playerLastClaim * 1000);
-	var _reward = 0.00000002 * a_playerTree * _millisecondSinceLast / 1000;
+	var _reward = 0.00000002 * a_playerTree * _millisecondSinceLast / 1000 / 86400;
 	a_playerEtherShare = parseFloat(_reward, 'ether').toFixed(10);
 	doc_playerEtherShare.innerHTML = a_playerEtherShare;
 }
