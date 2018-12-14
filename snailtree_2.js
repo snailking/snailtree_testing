@@ -203,37 +203,6 @@ function fastupdatePecanShare(){
 	a_playerPecanShare = parseFloat(_reward).toFixed(0);
 	doc_playerPecanShare.innerHTML = a_playerPecanShare;
 }
-
- // ComputeShareBoostFactor
-    // Returns current personal Pecan multiplier
-    // Starts at 4, adds 1 per hour
-    
-    function ComputeShareBoostFactor(address adr) public view returns(uint256) {
-        
-        //Get time since last claim
-        uint256 _timeLapsed = now.sub(lastClaim[adr]);
-        
-        //Compute boostFactor (starts at 4, +1 per hour)
-        uint256 _boostFactor = (_timeLapsed.div(SECONDS_IN_HOUR)).add(4);
-        return _boostFactor;
-    }
-    
-    // ComputePecanShare
-    // Returns Pecan reward for a claim
-    // Reward = 1 Pecan per treeSize per day, multiplied by personal boost
-    
-    function ComputePecanShare(address adr) public view returns(uint256) {
-        
-        //Get time since last claim
-        uint256 _timeLapsed = now.sub(lastClaim[adr]);
-        
-        //Get boostFactor
-        uint256 _shareBoostFactor = ComputeShareBoostFactor(adr);
-        
-        //Compute reward
-        uint256 _reward = _timeLapsed.mul(treeSize[adr]).mul(_shareBoostFactor).div(SECONDS_IN_DAY);
-        return _reward;
-    }
 		
 /* WEB3 CALLS */
 
