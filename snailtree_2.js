@@ -313,7 +313,7 @@ function updatePlayerPecan(){
 //Last claim for player
 function updatePlayerClaim(){
 	GetMyLastClaim(function(result) {
-		a_playerClaim = result;
+		a_playerLastClaim = result;
 	});
 }	
 
