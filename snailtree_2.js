@@ -112,7 +112,7 @@ function fastUpdate(){
 	fastupdateRootPecan();
 	fastupdateEtherShare();
 	fastupdatePecanShare();
-	setTimeout(fastUpdate, 100);
+	setTimeout(fastUpdate, 120); //100
 }
 
 //Updates all text from web3 calls
