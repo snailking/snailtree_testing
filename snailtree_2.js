@@ -112,7 +112,7 @@ function fastUpdate(){
 	fastupdateRootPecan();
 	fastupdateEtherShare();
 	fastupdatePecanShare();
-	setTimeout(fastUpdate, 100);
+	setTimeout(fastUpdate, 500);
 }
 
 //Updates all text from web3 calls
@@ -182,9 +182,10 @@ function computePecanLeft(){
 /* FAST LOCAL UPDATES */
 function fastupdateRootPecan(){
 	timeNow = (new Date).getTime();
+	console.log(timeNow);
 	var _millisecondSinceLast = parseFloat(timeNow) - parseFloat(a_lastRootPlant * 1000);
 	var _boostFactor = parseFloat((_millisecondSinceLast * 0.005) + parseFloat(1000));
-	var _reward = _boostFactor / 0.5;
+	var _reward = 1000 * _boostFactor / 0.5;
 	a_rootPecanForOneEther = parseFloat(_reward).toFixed(0);
 	doc_rootPecanForOneEther.innerHTML = a_rootPecanForOneEther;
 }
@@ -192,8 +193,11 @@ function fastupdateRootPecan(){
 function fastupdateEtherShare(){
 	//var _now = (new Date).getTime();
 	var _millisecondSinceLast = parseFloat(timeNow) - parseFloat(a_playerLastClaim * 1000);
+	console.log(_millisecondSinceLast);
 	var _reward = a_playerTree * _millisecondSinceLast / 1000;
+	console.log(_reward);
 	a_playerEtherShare = parseFloat(_reward).toFixed(0);
+	console.log(a_playerEtherShare);
 	doc_playerEtherShare.innerHTML = a_playerEtherShare;
 }
 		
