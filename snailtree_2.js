@@ -27,6 +27,8 @@ window.addEventListener("load", function() {
 
 /* VARIABLES */
 
+var timeNow;
+
 var a_contractBalance;
 var a_gameRound;
 var a_roundPot;
@@ -179,8 +181,8 @@ function computePecanLeft(){
 
 /* FAST LOCAL UPDATES */
 function fastupdateRootPecan(){
-	var _now = (new Date).getTime();
-	var _millisecondSinceLast = parseFloat(_now) - parseFloat(a_lastRootPlant * 1000);
+	timeNow = (new Date).getTime();
+	var _millisecondSinceLast = parseFloat(timeNow) - parseFloat(a_lastRootPlant * 1000);
 	var _boostFactor = parseFloat((_millisecondSinceLast * 0.005) + parseFloat(1000));
 	var _reward = _boostFactor / 0.5;
 	a_rootPecanForOneEther = parseFloat(_reward).toFixed(0);
@@ -188,16 +190,16 @@ function fastupdateRootPecan(){
 }
 
 function fastupdateEtherShare(){
-	var _now = (new Date).getTime();
-	var _millisecondSinceLast = parseFloat(_now) - parseFloat(a_playerLastClaim * 1000);
+	//var _now = (new Date).getTime();
+	var _millisecondSinceLast = parseFloat(timeNow) - parseFloat(a_playerLastClaim * 1000);
 	var _reward = a_playerTree * _millisecondSinceLast / 1000;
 	a_playerEtherShare = parseFloat(_reward).toFixed(0);
 	doc_playerEtherShare.innerHTML = a_playerEtherShare;
 }
 		
 function fastupdatePecanShare(){
-	var _now = (new Date).getTime();
-	var _millisecondSinceLast = parseFloat(_now) - parseFloat(a_playerLastClaim * 1000);
+	//var _now = (new Date).getTime();
+	var _millisecondSinceLast = parseFloat(timeNow) - parseFloat(a_playerLastClaim * 1000);
 	var _boostFactor = parseFloat((_millisecondSinceLast / 3600000) + parseFloat(4));
 	var _reward = _millisecondSinceLast / 1000 * a_playerTree * _boostFactor / 86400;
 	a_playerPecanShare = parseFloat(_reward).toFixed(0);
