@@ -112,7 +112,7 @@ function fastUpdate(){
 	fastupdateRootPecan();
 	fastupdateEtherShare();
 	fastupdatePecanShare();
-	setTimeout(fastUpdate, 120); //100
+	setTimeout(fastUpdate, 100);
 }
 
 //Updates all text from web3 calls
@@ -946,7 +946,7 @@ function ComputePlantPecan(_msgValue,callback){
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
         if(!error){
-            //console.log('ComputePlantPecan ',web3.toDecimal(result));
+            console.log('ComputePlantPecan ',web3.toDecimal(result));
             callback(web3.toDecimal(result))
         }
         else{
