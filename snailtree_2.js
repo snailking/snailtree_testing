@@ -96,6 +96,7 @@ function slowUpdate(){
 	updatePlayerRound();
 	updatePlayerTree();
 	updatePlayerPecan();
+	updatePlayerClaim();
 	updatePlayerEtherShare();
 	updatePlayerPecanShare();
 	updateRootPecan();
@@ -107,6 +108,8 @@ function slowUpdate(){
 function fastUpdate(){
 	updateField();
 	fastupdateRootPecan();
+	fastupdateEtherShare();
+	fastupdatePecanShare();
 	setTimeout(fastUpdate, 100);
 }
 
@@ -177,12 +180,60 @@ function computePecanLeft(){
 /* FAST LOCAL UPDATES */
 function fastupdateRootPecan(){
 	var _now = (new Date).getTime();
-	var _timeSinceLastMs = parseFloat(_now) - parseFloat(a_lastRootPlant * 1000);
-	var _boostFactor = parseFloat((_timeSinceLastMs * 0.005) + parseFloat(1000));
-	var _reward = _boostFactor / 0.0005 / 1000;
+	var _millisecondSinceLast = parseFloat(_now) - parseFloat(a_lastRootPlant * 1000);
+	var _boostFactor = parseFloat((_millisecondSinceLast * 0.005) + parseFloat(1000));
+	var _reward = _boostFactor / 0.5;
 	a_rootPecanForOneEther = parseFloat(_reward).toFixed(0);
 	doc_rootPecanForOneEther.innerHTML = a_rootPecanForOneEther;
 }
+
+function fastupdateEtherShare(){
+	var _now = (new Date).getTime();
+	var _millisecondSinceLast = parseFloat(_now) - parseFloat(a_playerLastClaim * 1000);
+	var _reward = a_playerTree * _millisecondSinceLast / 1000;
+	a_playerEtherShare = parseFloat(_reward).toFixed(0);
+	doc_playerEtherShare.innerHTML = a_playerEtherShare;
+}
+		
+function fastupdatePecanShare(){
+	var _now = (new Date).getTime();
+	var _millisecondSinceLast = parseFloat(_now) - parseFloat(a_playerLastClaim * 1000);
+	var _boostFactor = parseFloat(_millisecondSinceLast / 3600000) + parseFloat(4);
+	var _reward = _millisecondSinceLast / 1000 * a_playerTree * _boostFactor / 86400;
+	a_playerPecanShare = parseFloat(_reward).toFixed(0);
+	doc_playerPecanShare.innerHTML = a_playerPecanShare;
+}
+
+ // ComputeShareBoostFactor
+    // Returns current personal Pecan multiplier
+    // Starts at 4, adds 1 per hour
+    
+    function ComputeShareBoostFactor(address adr) public view returns(uint256) {
+        
+        //Get time since last claim
+        uint256 _timeLapsed = now.sub(lastClaim[adr]);
+        
+        //Compute boostFactor (starts at 4, +1 per hour)
+        uint256 _boostFactor = (_timeLapsed.div(SECONDS_IN_HOUR)).add(4);
+        return _boostFactor;
+    }
+    
+    // ComputePecanShare
+    // Returns Pecan reward for a claim
+    // Reward = 1 Pecan per treeSize per day, multiplied by personal boost
+    
+    function ComputePecanShare(address adr) public view returns(uint256) {
+        
+        //Get time since last claim
+        uint256 _timeLapsed = now.sub(lastClaim[adr]);
+        
+        //Get boostFactor
+        uint256 _shareBoostFactor = ComputeShareBoostFactor(adr);
+        
+        //Compute reward
+        uint256 _reward = _timeLapsed.mul(treeSize[adr]).mul(_shareBoostFactor).div(SECONDS_IN_DAY);
+        return _reward;
+    }
 		
 /* WEB3 CALLS */
 
@@ -283,6 +334,13 @@ function updatePlayerPecan(){
 		a_playerPecan = result;
 	});
 }		
+
+//Last claim for player
+function updatePlayerClaim(){
+	GetMyLastClaim(function(result) {
+		a_playerClaim = result;
+	});
+}	
 
 //Compute EtherShare
 function updatePlayerEtherShare(){
