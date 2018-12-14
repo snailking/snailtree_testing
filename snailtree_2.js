@@ -198,7 +198,7 @@ function fastupdateEtherShare(){
 function fastupdatePecanShare(){
 	var _now = (new Date).getTime();
 	var _millisecondSinceLast = parseFloat(_now) - parseFloat(a_playerLastClaim * 1000);
-	var _boostFactor = parseFloat(_millisecondSinceLast / 3600000) + parseFloat(4);
+	var _boostFactor = parseFloat((_millisecondSinceLast / 3600000) + parseFloat(4));
 	var _reward = _millisecondSinceLast / 1000 * a_playerTree * _boostFactor / 86400;
 	a_playerPecanShare = parseFloat(_reward).toFixed(0);
 	doc_playerPecanShare.innerHTML = a_playerPecanShare;
