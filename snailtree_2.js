@@ -145,7 +145,7 @@ function updateText(){
 	doc_wonkPot.innerHTML = a_wonkPot;
 	doc_thronePot.innerHTML = a_thronePot;
 	doc_jackPot.innerHTML = a_jackPot;
-	doc_pecanToWin.innerHTML = numberWithSpaces(a_pecanToWin);
+	doc_pecanToWin.innerHTML = a_pecanToWin;
 	doc_pecanGiven.innerHTML = a_pecanGiven;
 	doc_lastRootPlant.innerHTML = computeLastRootPlant();
 	doc_playerBalance.innerHTML = a_playerBalance;
