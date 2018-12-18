@@ -49,6 +49,7 @@ var a_playerLastClaim;
 var a_playerEtherShare;
 var a_playerPecanShare;
 var a_rootPecanForOneEther;
+var a_tradeReward;
 
 var f_pecan;
 var f_root;
@@ -72,10 +73,10 @@ var doc_playerPecan = document.getElementById('playerpecan');
 var	doc_playerEtherShare = document.getElementById('playerethershare');
 var	doc_playerPecanShare = document.getElementById('playerpecanshare');
 var	doc_rootPecanForOneEther = document.getElementById('rootpecanforoneether');
-//var doc_playerLastClaim = document.getElementById('playerlastclaim');
-var doc_fieldpecan = document.getElementById('fieldPecan');
-var doc_fieldroot = document.getElementById('fieldRoot');
-
+var doc_playerLastClaim = document.getElementById('playerlastclaim');
+var doc_fieldPecan = document.getElementById('fieldPecan');
+var doc_fieldRoot = document.getElementById('fieldRoot');
+var doc_tradeReward = document.getElementById('tradereward');
 
 /* UPDATE */
 
@@ -103,7 +104,7 @@ function slowUpdate(){
 	updatePlayerEtherShare();
 	updatePlayerPecanShare();
 	updateRootPecan();
-	//updatePlayerClaim();
+	updatePlayerClaim();
 	updateText();
 	setTimeout(slowUpdate, 4000);
 }
@@ -113,6 +114,7 @@ function fastUpdate(){
 	fastupdateRootPecan();
 	fastupdateEtherShare();
 	fastupdatePecanShare();
+	computeWonkWonk();
 	setTimeout(fastUpdate, 100);
 }
 
@@ -125,14 +127,14 @@ function updateText(){
 	doc_wonkPot.innerHTML = a_wonkPot;
 	doc_thronePot.innerHTML = a_thronePot;
 	doc_jackPot.innerHTML = a_jackPot;
-	doc_pecanToWin.innerHTML = a_pecanToWin;
+	doc_pecanToWin.innerHTML = numberWithSpaces(a_pecanToWin);
 	doc_pecanGiven.innerHTML = a_pecanGiven;
 	doc_lastRootPlant.innerHTML = computeLastRootPlant();
 	doc_playerBalance.innerHTML = a_playerBalance;
 	doc_playerRound.innerHTML = a_playerRound;
 	doc_playerTree.innerHTML = a_playerTree;
 	doc_playerPecan.innerHTML = a_playerPecan;
-	//doc_playerLastClaim.innerHTML = a_playerLastClaim;
+	doc_playerLastClaim.innerHTML = a_playerLastClaim;
 	doc_playerEtherShare.innerHTML = a_playerEtherShare;
 	doc_playerPecanShare.innerHTML = a_playerPecanShare;
 	doc_rootPecanForOneEther.innerHTML = a_rootPecanForOneEther;
@@ -141,6 +143,7 @@ function updateText(){
 function updateField(){
 	f_pecan = document.getElementById('fieldPecan').value;
 	f_root = document.getElementById('fieldRoot').value;
+	doc_tradeReward.innerHTML = a_tradeReward;
 }
 
 /* UTILITIES */
@@ -183,6 +186,12 @@ function computeLastRootPlant(){
 
 function computePecanLeft(){
 	a_pecanLeft = parseFloat(a_pecanToWin - a_pecanGiven).toFixed(0);
+}
+
+function computeWonkWonk(){
+	ComputeWonkTrade(f_pecan, function(result) {
+		a_tradeReward = result;
+	});
 }
 
 /* FAST LOCAL UPDATES */
