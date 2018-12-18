@@ -159,8 +159,8 @@ function formatEthValue2(ethstr){
 }
 
 //Adds spaces between integers
-function numberWithSpaces(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+function numberWithSpaces(numb) {
+    return numb.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
 /* CALCULATIONS */
