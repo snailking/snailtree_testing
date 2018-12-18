@@ -38,17 +38,17 @@ var a_wonkPot;
 var a_thronePot;
 var a_jackPot;
 var a_pecanToWin = 0;
-var a_pecanGiven;
-var a_pecanLeft;
+var a_pecanGiven = 0;
+var a_pecanLeft = 0;
 var a_lastRootPlant;
 var a_playerBalance;
 var a_playerRound;
-var a_playerTree;
-var a_playerPecan;
+var a_playerTree = 0;
+var a_playerPecan = 0;
 var a_playerLastClaim;
 var a_playerEtherShare;
-var a_playerPecanShare;
-var a_rootPecanForOneEther;
+var a_playerPecanShare = 0;
+var a_rootPecanForOneEther = 0;
 var a_tradeReward;
 
 var f_pecan;
@@ -95,6 +95,29 @@ function numberWithSpaces(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
+//Time since player claim, converted to text
+function timeSincePlayerClaim(){
+	var blocktime = Math.round((new Date()).getTime() / 1000); //current blocktime should be Unix timestamp
+	a_timeSincePlayerClaim = blocktime - a_playerLastClaim;
+	
+	downtime_hours = Math.floor(a_timeSincePlayerClaim / 3600);
+	downtime_minutes = Math.floor((a_timeSincePlayerClaim % 3600) / 60);
+	downtime_seconds = parseFloat((a_timeSincePlayerClaim % 3600) % 60).toFixed(0);
+	
+	doc_playerLastClaim.innerHTML = "";
+	
+	if(downtime_hours > 0){
+		doc_playerLastClaim.innerHTML += downtime_hours + " Hours ";
+	}
+	if(downtime_minutes > 0){
+		doc_playerLastClaim.innerHTML += downtime_minutes + " Minutes ";
+	}
+	if(downtime_hours == 0 && downtime_minutes == 0){
+		doc_playerLastClaim.innerHTML += "A few moments ";
+	}
+	
+	doc_playerLastClaim.innerHTML += " ago";
+}
 
 /* UPDATE */
 
@@ -146,16 +169,16 @@ function updateText(){
 	doc_thronePot.innerHTML = a_thronePot;
 	doc_jackPot.innerHTML = a_jackPot;
 	doc_pecanToWin.innerHTML = numberWithSpaces(a_pecanToWin);
-	doc_pecanGiven.innerHTML = a_pecanGiven;
+	doc_pecanGiven.innerHTML = numberWithSpaces(a_pecanGiven);
 	doc_lastRootPlant.innerHTML = computeLastRootPlant();
 	doc_playerBalance.innerHTML = a_playerBalance;
 	doc_playerRound.innerHTML = a_playerRound;
-	doc_playerTree.innerHTML = a_playerTree;
-	doc_playerPecan.innerHTML = a_playerPecan;
-	doc_playerLastClaim.innerHTML = a_playerLastClaim;
+	doc_playerTree.innerHTML = numberWithSpaces(a_playerTree);
+	doc_playerPecan.innerHTML = numberWithSpaces(a_playerPecan);
 	doc_playerEtherShare.innerHTML = a_playerEtherShare;
-	doc_playerPecanShare.innerHTML = a_playerPecanShare;
-	doc_rootPecanForOneEther.innerHTML = a_rootPecanForOneEther;
+	doc_playerPecanShare.innerHTML = numberWithSpaces(a_playerPecanShare);
+	doc_rootPecanForOneEther.innerHTML = numberWithSpaces(a_rootPecanForOneEther);
+	timeSincePlayerClaim();
 }
 
 function updateField(){
