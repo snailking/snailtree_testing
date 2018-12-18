@@ -37,7 +37,7 @@ var a_treePot;
 var a_wonkPot;
 var a_thronePot;
 var a_jackPot;
-var a_pecanToWin;
+var a_pecanToWin = 0;
 var a_pecanGiven;
 var a_pecanLeft;
 var a_lastRootPlant;
@@ -145,7 +145,7 @@ function updateText(){
 	doc_wonkPot.innerHTML = a_wonkPot;
 	doc_thronePot.innerHTML = a_thronePot;
 	doc_jackPot.innerHTML = a_jackPot;
-	doc_pecanToWin.innerHTML = a_pecanToWin;
+	doc_pecanToWin.innerHTML = numberWithSpaces(a_pecanToWin);
 	doc_pecanGiven.innerHTML = a_pecanGiven;
 	doc_lastRootPlant.innerHTML = computeLastRootPlant();
 	doc_playerBalance.innerHTML = a_playerBalance;
@@ -191,7 +191,7 @@ function computePecanLeft(){
 
 function computeWonkWonk(){
 	ComputeWonkTrade(f_pecan, function(result) {
-		a_tradeReward = result;
+		a_tradeReward = formatEthValue(web3.fromWei(result, 'ether'));
 	});
 }
 
