@@ -1,4 +1,5 @@
-contractAddress="0x0ccA66f376C89EDF3b524DEA3AAf6fdC4aBaD603"
+//contractAddress="0x0ccA66f376C89EDF3b524DEA3AAf6fdC4aBaD603"; //ROPSTEN v2
+contractAddress="0xe4fe6d8D6E036d53a66439EF31869B1210ca7988";
 
 /* WEB3 DETECTION */
 // TESTNET!!
@@ -154,6 +155,11 @@ function formatEthValue2(ethstr){
 	return parseFloat(parseFloat(ethstr).toFixed(6));
 }
 
+//Adds spaces between integers
+function numberWithSpaces(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
 /* CALCULATIONS */
 
 function computeLastRootPlant(){
@@ -187,7 +193,7 @@ function fastupdateRootPecan(){
 	var _boostFactor = parseFloat((_millisecondSinceLast * 0.005) + parseFloat(1000));
 	var _reward = 1000 * _boostFactor / 0.5;
 	a_rootPecanForOneEther = parseFloat(_reward).toFixed(0);
-	doc_rootPecanForOneEther.innerHTML = a_rootPecanForOneEther;
+	doc_rootPecanForOneEther.innerHTML = numberWithSpaces(a_rootPecanForOneEther);
 }
 
 function fastupdateEtherShare(){
@@ -202,7 +208,7 @@ function fastupdatePecanShare(){
 	var _boostFactor = parseFloat((_millisecondSinceLast / 3600000) + parseFloat(4));
 	var _reward = _millisecondSinceLast / 1000 * a_playerTree * _boostFactor / 86400;
 	a_playerPecanShare = parseFloat(_reward).toFixed(0);
-	doc_playerPecanShare.innerHTML = a_playerPecanShare;
+	doc_playerPecanShare.innerHTML = numberWithSpaces(a_playerPecanShare);
 }
 		
 /* WEB3 CALLS */
