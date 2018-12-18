@@ -78,6 +78,24 @@ var doc_fieldPecan = document.getElementById('fieldPecan');
 var doc_fieldRoot = document.getElementById('fieldRoot');
 var doc_tradeReward = document.getElementById('tradereward');
 
+/* UTILITIES */
+
+//Truncates ETH value to 3 decimals
+function formatEthValue(ethstr){
+    return parseFloat(parseFloat(ethstr).toFixed(3));
+}
+
+//Truncates ETH value to 6 decimals
+function formatEthValue2(ethstr){
+	return parseFloat(parseFloat(ethstr).toFixed(6));
+}
+
+//Adds spaces between integers
+function numberWithSpaces(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
+
 /* UPDATE */
 
 function initUpdate(){
@@ -144,23 +162,6 @@ function updateField(){
 	f_pecan = document.getElementById('fieldPecan').value;
 	f_root = document.getElementById('fieldRoot').value;
 	doc_tradeReward.innerHTML = a_tradeReward;
-}
-
-/* UTILITIES */
-
-//Truncates ETH value to 3 decimals
-function formatEthValue(ethstr){
-    return parseFloat(parseFloat(ethstr).toFixed(3));
-}
-
-//Truncates ETH value to 6 decimals
-function formatEthValue2(ethstr){
-	return parseFloat(parseFloat(ethstr).toFixed(6));
-}
-
-//Adds spaces between integers
-function numberWithSpaces(numb) {
-    return numb.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
 /* CALCULATIONS */
