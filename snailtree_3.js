@@ -291,8 +291,6 @@ function fastupdatePecanShare(){
 	var _reward = _millisecondSinceLast / 1000 * a_playerTree * _boostFactor / 86400;
 	a_playerPecanShare = parseFloat(_reward).toFixed(0);
 	doc_playerPecanShare.innerHTML = numberWithSpaces(a_playerPecanShare);
-	var _pecan4x = a_playerPecanShare * 4;
-	doc_pecan4x.innerHTML = numberWithSpaces(_pecan4x);
 }
 		
 /* WEB3 CALLS */
