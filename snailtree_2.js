@@ -214,7 +214,7 @@ function computePecanLeft(){
 
 function computeWonkWonk(){
 	ComputeWonkTrade(f_pecan, function(result) {
-		a_tradeReward = formatEthValue(web3.fromWei(result, 'ether'));
+		a_tradeReward = parseFloat(web3.fromWei(result, 'ether')).toFixed(8);
 	});
 }
 
@@ -232,7 +232,7 @@ function fastupdateRootPecan(){
 function fastupdateEtherShare(){
 	var _millisecondSinceLast = parseFloat(timeNow) - parseFloat(a_playerLastClaim * 1000);
 	var _reward = 0.00000002 * a_playerTree * _millisecondSinceLast / 1000 / 86400;
-	a_playerEtherShare = parseFloat(_reward, 'ether').toFixed(10);
+	a_playerEtherShare = parseFloat(_reward).toFixed(10);
 	doc_playerEtherShare.innerHTML = a_playerEtherShare;
 }
 		
