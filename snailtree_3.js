@@ -141,17 +141,14 @@ function timeSincePlayerClaim(){
 	
 	doc_playerLastClaim.innerHTML = "";
 	
-	if(downtime_hours > 0){
-		doc_playerLastClaim.innerHTML += downtime_hours + " Hours ";
-	}
 	if(downtime_minutes > 0){
-		doc_playerLastClaim.innerHTML += downtime_minutes + " Minutes ";
+		doc_playerLastClaim.innerHTML += downtime_minutes + " Minutes ago";
+	} else {
+		doc_playerLastClaim.innerHTML += "A few moments ago";
+	}	
+	if(downtime_hours > 0){
+		doc_playerLastClaim.innerHTML = downtime_hours + " Hour(s) ago. [BOOST READY]";
 	}
-	if(downtime_hours == 0 && downtime_minutes == 0){
-		doc_playerLastClaim.innerHTML += "A few moments ";
-	}
-	
-	doc_playerLastClaim.innerHTML += " ago";
 }
 
 /* UPDATE */
@@ -1082,7 +1079,7 @@ plantedrootEvent.watch(function(error, result){
 		//////////console.log(result);
 		if(checkHash(storetxhash, result.transactionHash) != 0) {
 			date24();
-			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH. His tree reaches " + treesize + " in size.";
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH. His tree reaches " + result.args.treesize + " in size.";
 			logboxscroll.scrollTop = logboxscroll.scrollHeight;
 		}
 	}
@@ -1095,7 +1092,7 @@ claimedshareEvent.watch(function(error, result){
 		//////////console.log(result);
 		if(checkHash(storetxhash, result.transactionHash) != 0) {
 			date24();
-			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " claimed his share worth " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH and got " + pecan + " Pecans.";
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " claimed his share worth " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH and got " + result.args.pecan + " Pecans.";
 			logboxscroll.scrollTop = logboxscroll.scrollHeight;
 		}
 	}
@@ -1108,7 +1105,7 @@ grewtreeEvent.watch(function(error, result){
 		//////////console.log(result);
 		if(checkHash(storetxhash, result.transactionHash) != 0) {
 			date24();
-			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " grew his Tree and won " + pecan + " Pecans. His boost is " + boost + "x.";
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " grew his Tree and won " + result.args.pecan + " Pecans. His boost is " + result.args.boost + "x.";
 			logboxscroll.scrollTop = logboxscroll.scrollHeight;
 		}
 	}
@@ -1160,7 +1157,7 @@ boostedpotEvent.watch(function(error, result){
 		//////////console.log(result);
 		if(checkHash(storetxhash, result.transactionHash) != 0) {
 			date24();
-			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " makes a generous " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH donation to the SnailPot. Next round is going to be sweet!";
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " makes a generous " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH donation to the JackPot.";
 			logboxscroll.scrollTop = logboxscroll.scrollHeight;
 		}
 	}
