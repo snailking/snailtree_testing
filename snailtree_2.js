@@ -96,6 +96,8 @@ var doc_fieldPecan = document.getElementById('fieldPecan');
 var doc_fieldRoot = document.getElementById('fieldRoot');
 var doc_tradeReward = document.getElementById('tradereward');
 var doc_progressBar = document.getElementById('progressbarpecan');
+var doc_pecan4x = document.getElementById('pecan4x');
+var doc_fieldPecanReward = document.getElementById('fieldpecanreward');
 
 /* UTILITIES */
 
@@ -109,9 +111,23 @@ function formatEthValue2(ethstr){
 	return parseFloat(parseFloat(ethstr).toFixed(6));
 }
 
+//Truncates ETH address to first 8 numbers
+function formatEthAdr(adr){
+	return adr.substring(0, 10);
+}
+
 //Adds spaces between integers
 function numberWithSpaces(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
+//Conversion of Date to hh:mm:ss
+var datetext;
+
+function date24() {
+	d = new Date();
+	datetext = d.toTimeString();
+	datetext = datetext.split(' ')[0];
 }
 
 //Time since player claim, converted to text
@@ -232,7 +248,9 @@ function computeLastRootPlant(){
 
 function computeProgressBar(){
 	var _state = parseFloat(a_pecanGiven / a_pecanToWin).toFixed(2);
-	doc_progressBar.style.width = (_state * 100) + '%';
+	var _result = (_state * 100) + '%';
+	doc_progressBar.style.width = _result;
+	doc_progressBar.innerHTML = _result;
 }
 
 function computePecanLeft(){
@@ -254,6 +272,8 @@ function fastupdateRootPecan(){
 	var _reward = 1000 * _boostFactor / 0.5;
 	a_rootPecanForOneEther = parseFloat(_reward).toFixed(0);
 	doc_rootPecanForOneEther.innerHTML = numberWithSpaces(a_rootPecanForOneEther);
+	var _playerReward = parseFloat(a_rootPecanForOneEther * f_root).toFixed(0);
+	doc_fieldPecanReward.innerHTML = numberWithSpaces(_playerReward);
 }
 
 function fastupdateEtherShare(){
@@ -269,6 +289,8 @@ function fastupdatePecanShare(){
 	var _reward = _millisecondSinceLast / 1000 * a_playerTree * _boostFactor / 86400;
 	a_playerPecanShare = parseFloat(_reward).toFixed(0);
 	doc_playerPecanShare.innerHTML = numberWithSpaces(a_playerPecanShare);
+	var _pecan4x = a_playerPecanShare * 4;
+	doc_pecan4x.innerHTML = numberWithSpaces(_pecan4x);
 }
 		
 /* WEB3 CALLS */
@@ -1098,4 +1120,121 @@ function ClaimShare(callback){
     });
 }
 
+/* EVENT WATCH */
 
+//Store transaction hash for each event, and check before executing result, as web3 events fire twice
+var storetxhash = [];
+
+//Check equivalency
+function checkHash(txarray, txhash) {
+	var i = 0;
+	do {
+		if(txarray[i] == txhash) {
+			return 0;
+		}
+		i++;
+	}
+	while(i < txarray.length);
+	//Add new tx hash
+	txarray.push(txhash);
+	//Remove first tx hash if there's more than 16 hashes saved
+	if(txarray.length > 16) {
+		txarray.shift();
+	}
+}
+
+/* EVENTS */
+
+var logboxscroll = document.getElementById('logboxscroll');
+var eventlogdoc = document.getElementById("eventlog");
+
+var plantedrootEvent = myContract.PlantedRoot();
+
+plantedrootEvent.watch(function(error, result){
+    if(!error){
+		////////console.log(result);
+		if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH. His tree reaches " + treesize + " in size.";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		}
+	}
+});
+
+var claimedshareEvent = myContract.ClaimedShare();
+
+claimedshareEvent.watch(function(error, result){
+    if(!error){
+		////////console.log(result);
+		if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " claimed his share worth " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH and got " + pecan + " Pecans.";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		}
+	}
+});
+
+var grewtreeEvent = myContract.GrewTree();
+
+grewtreeEvent.watch(function(error, result){
+    if(!error){
+		////////console.log(result);
+		if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " grew his Tree with his share worth " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH and won " + pecan + " Pecans.";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		}
+	}
+});
+
+var wonroundEvent = myContract.WonRound();
+
+wonroundEvent.watch(function(error, result){
+    if(!error){
+		////////console.log(result);
+		//if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " WINS ROUND " + result.args.round + " AND EARNS " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH!";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		//}
+	}
+});
+
+var withdrewbalanceEvent = myContract.WithdrewBalance();
+
+withdrewbalanceEvent.watch(function(error, result){
+    if(!error){
+		////////console.log(result);
+		if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " withdrew " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH from his balance.";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		}
+	}
+});
+
+var paidthroneEvent = myContract.PaidThrone();
+
+paidthroneEvent.watch(function(error, result){
+    if(!error){
+		////////console.log(result);
+		if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " paid tribute to the SnailThrone! " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH have been sent.";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		}
+	}
+});
+
+var boostedpotEvent = myContract.BoostedPot();
+
+boostedpotEvent.watch(function(error, result){
+    if(!error){
+		////////console.log(result);
+		if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " makes a generous " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH donation to the SnailPot. Next round is going to be sweet!";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		}
+	}
+});

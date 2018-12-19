@@ -35,7 +35,7 @@
 			<h2 class="black-shadow"><span id="pecantowin">?</span> PECANS TO WIN <span id="roundpot">?</span> ETH</h1>
 			<h2 class="black-shadow">Plant a new Root for a bonus <span id="rootpecanforoneether">?</span> Pecans per ETH</h1><br>
 			<div class="progress" style="height: 40px;">
-				<div class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" id="progressbarpecan" align="center">0%</div>
+				<div class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" id="progressbarpecan"><h5>0%</h5></div>
 			</div><br>
 			<div class="row">
 				<div class="col-sm" align="left">
@@ -51,7 +51,7 @@
 			<img src="img/squirrel_crazy.png"><br><br>	
 			<button class="btn btn-lg btn-success" onclick="webGivePecan()">GIVE PECAN</button>
 			<br><p class="black-shadow">You have <span id="playerpecan">?</span> Pecans</p>
-			<br><p class="black-shadow">Give <input type="text" id="fieldPecan" value="1" size="8"> Pecans</p>
+			<br><p class="black-shadow">Give <input type="text" id="fieldPecan" value="1000" size="8"> Pecans</p>
 			<br><h4 class="black-shadow">RECEIVE <span id="tradereward">?</span> ETH<br><br>
 		</div>
 		<!-- TREE WINDOW. SHOW STATS, BIG FONT -->
@@ -71,20 +71,29 @@
 		<!-- TREE ACTIONS. PLANT, GROW, CLAIM -->
 		<div class="container">
 			<div class="row">
-				<div class="col-sm container-beige" align="center">
-					<br><button class="btn btn-lg btn-success" onclick="webCheckClaim()">PLANT ROOT</button>
-					<br><p>Invest <input type="text" id="fieldRoot" value="0.02" size="4"> ETH</p>
+				<div class="col-sm" align="center">
+					<div class="container-beige">
+						<button class="btn btn-lg btn-success" onclick="webCheckClaim()">PLANT ROOT</button>
+					</div>
+					<h5 class="black-shadow">Spend <input type="text" id="fieldRoot" value="0.02" size="3"> ETH</p>
+					<h5 class="black-shadow">Get <span id="fieldpecanreward">?</span> Pecans</p>
 				</div>
-				<div class="col-sm container-beige" align="center">
-					<br><button class="btn btn-lg btn-success" onclick="webGrowTree()">GROW TREE</button>
-					<p>Use share on tree, get 4x more Pecans</p>
+				<div class="col-sm" align="center">
+					<div class="container-beige">
+						<button class="btn btn-lg btn-success" onclick="webGrowTree()">GROW TREE</button>
+					</div>
+					<h5 class="black-shadow">Use share to increase tree size</p>
+					<h5 class="black-shadow">Reward: <span id="pecan4x">?</span> Pecans</p>
 				</div>
-				<div class="col-sm container-beige" align="center">
-					<br><button class="btn btn-lg btn-success" onclick="webClaimShare()">CLAIM SHARE</button>
-					<p>Pecans and ETH rewards</p>
+				<div class="col-sm" align="center">
+					<div class="container-beige">
+						<button class="btn btn-lg btn-success" onclick="webClaimShare()">CLAIM SHARE</button>
+					</div>
+					<h5 class="black-shadow">Get your ETH and Pecan rewards</p>
+					<h5 class="black-shadow">Claim before Planting any new Root!</p>
 				</div>
 			</div>
-		</div>
+		</div><br><br>
 		<!-- MODAL. IN CASE PLAYER HASN'T CLAIMED BEFORE BUY -->
 		<div id="claimmodal" class="modal">
 			<div class="jumbotron modal-content" align="center">
@@ -98,20 +107,20 @@
 				</div>
 			</div>
 		</div>
-		<!-- EVENT LOG HERE LATER -->
+		<!-- EVENT LOG -->
 		<div class="jumbotron">
-			<h3>Future event log!</h3>
+			<h3>EVENTS</h3>
 			<div class="container-beige">
-				[15:03:16] SnailKing has ported SnailFarm to Tron and now everyone's rich!<br>
-				[15:03:24] If only...<br>
-				Four lines or so.</br>
-				Ergo, one more</br>
+				<div class="scroll-box" id="logboxscroll">
+					<span id="eventlog">Waiting for events...</span>
+				</div>
 			</div>
 		</div>
 		<!-- WITHDRAW AND PAY THRONE -->
 		<div class="container">
 			<div class="row">
-				<div class="container-beige col-sm" >
+				<div class="col-sm">
+				<div class="container-beige">
 					<div class="row">
 						<div class="col-sm" align="left">
 							<h1><span id="playerbalance">?</span> ETH</h1>
@@ -121,7 +130,10 @@
 						</div>
 					</div>
 				</div>
-				<div class="container-beige col-sm" >
+				<h5 class="black-shadow" align="center">Send your ETH to your personal wallet</h5>
+				</div>
+				<div class="col-sm">
+				<div class="container-beige">
 					<div class="row">
 						<div class="col-sm" align="left">
 							<button class="btn btn-lg btn-success" onclick="webPayThrone()">PAY THRONE</button>
@@ -131,26 +143,34 @@
 						</div>
 					</div>
 				</div>
+				<h5 class="black-shadow" align="center">Send throne ETH to SnailThrone holders</h5>
+				</div>
 			</div>
-		</div>
-		<!-- KEEPING THIS FOR BETA -->
-		<div class="jumbotron">
-			<h3>Game Stuff</h3>
+		</div><br><br>
+		<!-- MISC STATS -->
+		<div class="jumbotron" align="center">
+			<h1 align="center" class="black-shadow">Misc Stats</h1>
 			<div class="container-beige">
-				<h5>Contract Balance: <span id="contractbalance">?</span></h5>
-				<h5>Game Round: </h5>
-				<h5>RoundPot: <span id="roundpot">?</span></h5>
-				<h5>TreePot: <span id="treepot">?</span></h5>
-				<h5>WonkPot: <span id="wonkpot">?</span></h5>
-				
-				<h5>JackPot: <span id="jackpot">?</span></h5>
-				<h5>Last Root Planted: <span id="lastrootplant">?</span></h5>
-				<h5>Pecans received for 1ETH buy: <span id="rootpecanforoneether">?</span></h5>
+				<h2>Contract Balance: <span id="contractbalance">?</span> ETH</h2><br>
+				<div class="row">
+					<div class="col-sm">
+						<h3>TreePot: <span id="treepot">?</span> ETH</h3>
+						<h5>The TreePot consistently pays out according to Tree Size</h5>
+					</div>
+					<div class="col-sm">
+						<h3>WonkPot: <span id="wonkpot">?</span> ETH</h3>
+						<h5>The WonkPot gives out Ether for Pecans</h5>
+					</div>
+					<div class="col-sm">
+						<h3>JackPot: <span id="jackpot">?</span> ETH</h3>
+						<h5>20% of the JackPot is used as Round reward</h5>
+					</div>
+				</div><br>
+				<h2>Last Root Planted: <span id="lastrootplant">?</span></h5>
 			</div>
 			<h3>My Stuff</h3>
 			<div class="container-beige">
 				<h5>Player Round: <span id="playerround">?</span></h5>
-				<h5>Player Pecan: </h5>
 			</div>
 		</div>
 		<script src="snailtree_2.js"></script>				
