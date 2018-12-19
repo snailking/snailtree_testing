@@ -26,6 +26,23 @@ window.addEventListener("load", function() {
     }
 });
 
+/* MODAL */
+
+// Get the modal
+var claim_modal = document.getElementById("claimmodal");
+
+// Close modal on game info
+function CloseModal() {
+	claim_modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == claim_modal) {
+        claim_modal.style.display = "none";
+    }
+}
+
 /* VARIABLES */
 
 var timeNow;
@@ -383,9 +400,13 @@ function webGivePecan(){
 
 //Plant root
 function webPlantRoot(){
-	var weitospend = web3.toWei(f_root,'ether');
-	PlantRoot(weitospend, function(){
-	});
+	if(a_playerEtherShare > 0.001){
+		claim_modal.style.display = "block";
+	} else {
+		var weitospend = web3.toWei(f_root,'ether');
+		PlantRoot(weitospend, function(){
+		});
+	}
 }
 
 //Grow tree

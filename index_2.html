@@ -38,8 +38,9 @@
 		<div class="container" align="center">
 			<img src="img/squirrel.png"><br>
 			<button class="btn btn-lg btn-success" onclick="webGivePecan()">GIVE PECAN</button>
-			<br><br><p class="black-shadow">Give <input type="text" id="fieldPecan" value="1" size="8"> Pecans</p>
-			<br><p><h4 class="black-shadow">RECEIVE <span id="tradereward">?</span> ETH</p>
+			<br><p class="black-shadow">You have <span id="playerpecan">?</span> Pecans</p>
+			<br><p class="black-shadow">Give <input type="text" id="fieldPecan" value="1" size="8"> Pecans</p>
+			<br><h4 class="black-shadow">RECEIVE <span id="tradereward">?</span> ETH
 		</div><br><br>
 		<!-- TREE WINDOW. SHOW STATS, BIG FONT -->
 		<div class="jumbotron"><br>
@@ -69,6 +70,19 @@
 				<div class="col-sm container-beige" align="center">
 					<br><button class="btn btn-lg btn-success" onclick="webClaimShare()">CLAIM SHARE</button>
 					<p>Pecans and ETH rewards</p>
+				</div>
+			</div>
+		</div>
+		<!-- MODAL. IN CASE PLAYER HASN'T CLAIMED BEFORE BUY -->
+		<div id="claim_modal" class="modal">
+			<div class="jumbotron modal-content" align="center">
+				<h3 class="black-shadow">You have unclaimed ETH and Pecans.</h3><br>
+				<div class="container-beige">
+					<h5>Planting another Root will reset your accumulated ETH and Pecans to 0!</h5>
+					<h5>It's recommended you Grow your Tree or Claim your Share before Planting a new Root.</h5>
+				</div>
+				<div class="container" align="center">
+					<button type="button" class="btn btn-success" onclick="CloseModal()">Got it!</button>
 				</div>
 			</div>
 		</div>
@@ -125,13 +139,8 @@
 			</div>
 			<h3>My Stuff</h3>
 			<div class="container-beige">
-				
 				<h5>Player Round: <span id="playerround">?</span></h5>
-				
-				<h5>Player Pecan: <span id="playerpecan">?</span></h5>
-				<h5>Player Ether Share: <span id="playerethershare">?</span></h5>
-				<h5>Player Pecan Share: <span id="playerpecanshare">?</span></h5>
-				<!--<h5>Last Player Claim: <span id="playerlastclaim">?</span></h5> NEED GETTER -->
+				<h5>Player Pecan: </h5>
 			</div>
 		</div>
 		<script src="snailtree_2.js"></script>				
