@@ -15,33 +15,45 @@
 	
 	<body>
 		<!-- TITLE STUFF -->
-		<div align="center" class="jumbotron">
-			<h1>SNAILTREE TESTING</h1> 
-			<h2>A Tale of Madness and Hubris</h2>
-			<a href="https://etherscan.io/address/0x2A185c995373a766979E645D0912d30E27aa56f6" target="_blank"><img height="48" src="img/contract_circle.png"></a>
-			<a href="https://discord.gg/8h3Emyb" target="_blank"><img height="48" src="img/discord_circle.png"></a>
-			<a href="https://twitter.com/EtherSnailFarm" target="_blank"><img height="48" src="img/twitter_circle.png"></a>
-			<a href="https://reddit.com/r/snailthrone" target="_blank"><img height="48" src="img/reddit_circle.png"></a>
-			<a href="https://medium.com/@thesnailking/snailfarm-3-competitive-idlegame-on-ethereum-3fe32bf774c7" target="_blank"><img height="48" src="img/medium_circle.png"></a>
-			<div class="container-beige">
-				<h5 align="left"> There once was a Squirrel from the Forest,</h5>
-				<h5 align="right">who, simply put, wasn't the smartest.</h5>
-				<h5 align="left">One day, he saw Snails building a Throne, </h5>
-				<h5 align="right">and thought "this is easy, I'm as good as anyone!"</h5>
-				<h5 align="left">His mind set, the Squirrel began, </h5>
-				<h5 align="right">instead of shell, he would use pecan</h5>
-				<h5 align="left">Come along, Ethertree SnailFarmers, </h5>
-				<h5 align="right">trade your harvest to the mad Wonkers.</h5>
+		<div class="jumbotron">
+			<div class="row">
+				<div class="col-sm">
+					<h1 class="black-shadow">SNAILTREE TESTING</h1> 
+				</div>
+				<div class="col-sm" align="right">
+					<a href="https://etherscan.io/address/0x2A185c995373a766979E645D0912d30E27aa56f6" target="_blank"><img height="48" src="img/contract_circle.png"></a>
+					<a href="https://discord.gg/8h3Emyb" target="_blank"><img height="48" src="img/discord_circle.png"></a>
+					<a href="https://twitter.com/EtherSnailFarm" target="_blank"><img height="48" src="img/twitter_circle.png"></a>
+					<a href="https://reddit.com/r/snailthrone" target="_blank"><img height="48" src="img/reddit_circle.png"></a>
+					<a href="https://medium.com/@thesnailking/snailfarm-3-competitive-idlegame-on-ethereum-3fe32bf774c7" target="_blank"><img height="48" src="img/medium_circle.png"></a>
+				</div>
+			</div>
+		</div><br><br>
+		<!-- PROGRESS BAR -->
+		<div class="container" align="center">
+			<h1 class="black-shadow">ROUND <span id="gameround">?</span></h1><br>
+			<h2 class="black-shadow"><span id="pecantowin">?</span> PECANS TO WIN <span id="roundpot">?</span> ETH</h1>
+			<h2 class="black-shadow">Plant a new Root for a bonus <span id="rootpecanforoneether">?</span> Pecans per ETH</h1><br>
+			<div class="progress" style="height: 40px;">
+				<div class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" id="progressbarpecan" align="center">0%</div>
+			</div><br>
+			<div class="row">
+				<div class="col-sm" align="left">
+					<h3 class="black-shadow"><span id="pecangiven">?</span> Pecans Given</h2>
+				</div>
+				<div class="col-sm" align="right">
+					<h3 class="black-shadow"><span id="pecanleft">?</span> Pecans Left</h2>
+				</div>
 			</div>
 		</div>
 		<!-- WONKERS WINDOW. PYRAMID MADE OUT OF PECANS. WONKERS ON TOP CHOMPING ON NUTS. GIVE BUTTON. VERTICAL PROGRESS BAR ON SIDE. -->
-		<div class="container" align="center">
-			<img src="img/squirrel.png"><br>
+		<div class="wonkers-container" align="center">
+			<img src="img/squirrel_crazy.png"><br><br>	
 			<button class="btn btn-lg btn-success" onclick="webGivePecan()">GIVE PECAN</button>
 			<br><p class="black-shadow">You have <span id="playerpecan">?</span> Pecans</p>
 			<br><p class="black-shadow">Give <input type="text" id="fieldPecan" value="1" size="8"> Pecans</p>
-			<br><h4 class="black-shadow">RECEIVE <span id="tradereward">?</span> ETH
-		</div><br><br>
+			<br><h4 class="black-shadow">RECEIVE <span id="tradereward">?</span> ETH<br><br>
+		</div>
 		<!-- TREE WINDOW. SHOW STATS, BIG FONT -->
 		<div class="jumbotron"><br>
 			<div class="row">
@@ -60,7 +72,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm container-beige" align="center">
-					<br><button class="btn btn-lg btn-success" onclick="webPlantRoot()">PLANT ROOT</button>
+					<br><button class="btn btn-lg btn-success" onclick="webCheckClaim()">PLANT ROOT</button>
 					<br><p>Invest <input type="text" id="fieldRoot" value="0.02" size="4"> ETH</p>
 				</div>
 				<div class="col-sm container-beige" align="center">
@@ -126,14 +138,12 @@
 			<h3>Game Stuff</h3>
 			<div class="container-beige">
 				<h5>Contract Balance: <span id="contractbalance">?</span></h5>
-				<h5>Game Round: <span id="gameround">?</span></h5>
+				<h5>Game Round: </h5>
 				<h5>RoundPot: <span id="roundpot">?</span></h5>
 				<h5>TreePot: <span id="treepot">?</span></h5>
 				<h5>WonkPot: <span id="wonkpot">?</span></h5>
 				
 				<h5>JackPot: <span id="jackpot">?</span></h5>
-				<h5>Pecans to Win: <span id="pecantowin">?</span></h5>
-				<h5>Pecans Given: <span id="pecangiven">?</span></h5>
 				<h5>Last Root Planted: <span id="lastrootplant">?</span></h5>
 				<h5>Pecans received for 1ETH buy: <span id="rootpecanforoneether">?</span></h5>
 			</div>

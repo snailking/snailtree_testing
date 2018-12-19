@@ -82,6 +82,7 @@ var doc_thronePot = document.getElementById('thronepot');
 var doc_jackPot = document.getElementById('jackpot');
 var doc_pecanToWin = document.getElementById('pecantowin');
 var doc_pecanGiven = document.getElementById('pecangiven');
+var doc_pecanLeft = document.getElementById('pecanleft');
 var doc_lastRootPlant = document.getElementById('lastrootplant');
 var doc_playerBalance = document.getElementById('playerbalance');
 var doc_playerRound = document.getElementById('playerround');
@@ -94,6 +95,7 @@ var doc_playerLastClaim = document.getElementById('playerlastclaim');
 var doc_fieldPecan = document.getElementById('fieldPecan');
 var doc_fieldRoot = document.getElementById('fieldRoot');
 var doc_tradeReward = document.getElementById('tradereward');
+var doc_progressBar = document.getElementById('progressbarpecan');
 
 /* UTILITIES */
 
@@ -163,6 +165,8 @@ function slowUpdate(){
 	updatePlayerPecanShare();
 	updateRootPecan();
 	updatePlayerClaim();
+	computePecanLeft();
+	computeProgressBar();
 	updateText();
 	setTimeout(slowUpdate, 4000);
 }
@@ -187,6 +191,7 @@ function updateText(){
 	doc_jackPot.innerHTML = a_jackPot;
 	doc_pecanToWin.innerHTML = numberWithSpaces(a_pecanToWin);
 	doc_pecanGiven.innerHTML = numberWithSpaces(a_pecanGiven);
+	doc_pecanLeft.innerHTML = numberWithSpaces(a_pecanLeft);
 	doc_lastRootPlant.innerHTML = computeLastRootPlant();
 	doc_playerBalance.innerHTML = a_playerBalance;
 	doc_playerRound.innerHTML = a_playerRound;
@@ -223,6 +228,11 @@ function computeLastRootPlant(){
 	}
 	
 	return _plantString;		
+}
+
+function computeProgressBar(){
+	var _state = parseFloat(a_pecanGiven / a_pecanToWin).toFixed(2);
+	doc_progressBar.style.width = (_state * 100)%;
 }
 
 function computePecanLeft(){
@@ -398,15 +408,20 @@ function webGivePecan(){
 	});
 }
 
-//Plant root
-function webPlantRoot(){
-	if(a_playerEtherShare > 0.001){
+//Check first if player doesn't have too much unclaimed ETH
+function webCheckClaim(){
+	if(a_playerEtherShare > 0.0001){
 		claim_modal.style.display = "block";
 	} else {
-		var weitospend = web3.toWei(f_root,'ether');
-		PlantRoot(weitospend, function(){
-		});
+		webPlantRoot();
 	}
+}
+
+//Plant root
+function webPlantRoot(){
+	var weitospend = web3.toWei(f_root,'ether');
+	PlantRoot(weitospend, function(){
+	});
 }
 
 //Grow tree

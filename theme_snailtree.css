@@ -13,7 +13,7 @@ body {
 
 
 .jumbotron {
-	background-color: #6c855d; /*#e8e6b6;*/
+	background-color: #316570; /*#e8e6b6;*/
 	position: center;
 	margin-left: auto;
 	margin-right: auto;
@@ -49,11 +49,11 @@ body {
 }
 
 .container-beige {
-	background-color: #e8e6b6;
+	background-color: #8eb6bf;
 	color: black;
 	position: center;
 	border: 4px solid transparent;
-	border-image: url("img/brick.png") 30 round;
+	border-image: url("img/green_leaves.jpg") 8 round;
 	padding: 0.5rem 0.5rem;
 	margin: 1rem;
 }
@@ -114,11 +114,17 @@ body {
 	border: 4px solid transparent;
 	border-image: url("img/brick.png") 30 round;
 	margin: 2px;
-	background-color: #b7a575;
+	background-color: #0e2128;
 }
 
 .leader-style {
 	font-size: 1.25rem;
+}
+
+.wonkers-container {
+	background-image: url("img/pile_nuts_2.png");
+	background-repeat: no-repeat;
+	background-position: center;
 }
 
 /* Modal (from W3Schools) */
