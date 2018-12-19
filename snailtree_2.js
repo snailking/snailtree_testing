@@ -232,7 +232,7 @@ function computeLastRootPlant(){
 
 function computeProgressBar(){
 	var _state = parseFloat(a_pecanGiven / a_pecanToWin).toFixed(2);
-	doc_progressBar.style.width = (_state * 100)%;
+	doc_progressBar.style.width = (_state * 100) + '%';
 }
 
 function computePecanLeft(){
