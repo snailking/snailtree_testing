@@ -85,7 +85,6 @@ var doc_pecanGiven = document.getElementById('pecangiven');
 var doc_pecanLeft = document.getElementById('pecanleft');
 var doc_lastRootPlant = document.getElementById('lastrootplant');
 var doc_playerBalance = document.getElementById('playerbalance');
-var doc_playerRound = document.getElementById('playerround');
 var doc_playerBoost = document.getElementById('playerboost');
 var doc_playerTree = document.getElementById('playertree');
 var doc_playerPecan = document.getElementById('playerpecan');
@@ -208,7 +207,6 @@ function updateText(){
 	doc_pecanLeft.innerHTML = numberWithSpaces(a_pecanLeft);
 	doc_lastRootPlant.innerHTML = computeLastRootPlant();
 	doc_playerBalance.innerHTML = a_playerBalance;
-	doc_playerRound.innerHTML = a_playerRound;
 	doc_playerBoost.innerHTML = a_playerBoost;
 	doc_playerTree.innerHTML = numberWithSpaces(a_playerTree);
 	doc_playerPecan.innerHTML = numberWithSpaces(a_playerPecan);
