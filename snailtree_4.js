@@ -97,6 +97,7 @@ var doc_fieldRoot = document.getElementById('fieldRoot');
 var doc_tradeReward = document.getElementById('tradereward');
 var doc_progressBar = document.getElementById('progressbarpecan');
 var doc_fieldPecanReward = document.getElementById('fieldpecanreward');
+var doc_boostReady = document.getElementById('boostready');
 
 /* UTILITIES */
 
@@ -139,14 +140,16 @@ function timeSincePlayerClaim(){
 	downtime_seconds = parseFloat((a_timeSincePlayerClaim % 3600) % 60).toFixed(0);
 	
 	doc_playerLastClaim.innerHTML = "";
+	doc_boostReady.innerHTML = "<h5 class='black-shadow'>Adds Boost once per hour</h5>";
 	
 	if(downtime_minutes > 0){
-		doc_playerLastClaim.innerHTML += downtime_minutes + " Minutes ago";
+		doc_playerLastClaim.innerHTML += downtime_minutes + " Minute(s) ago";
 	} else {
 		doc_playerLastClaim.innerHTML += "A few moments ago";
 	}	
 	if(downtime_hours > 0){
-		doc_playerLastClaim.innerHTML = downtime_hours + " Hour(s) ago. <h2 class='black-shadow'>[BOOST READY]</h2>";
+		doc_playerLastClaim.innerHTML = downtime_hours + " Hour(s) ago. Boost ready!";
+		doc_boostReady.innerHTML = "<h5 class='black-shadow pulse-text'>[BOOST READY]</h5>";
 	}
 }
 
