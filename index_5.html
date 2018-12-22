@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<!-- Title, Favicon -->
+		<title>SnailTree Testing</title>
+		<link rel="shortcut icon" href="favicon.png" type="image/x-icon">		
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="theme_bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="theme_animista.css">
+		<link rel="stylesheet" type="text/css" href="theme_snailtree.css">		
+	</head>
+	
+	<body>
+		<!-- TITLE STUFF -->
+		<div class="container" align="center">
+			<img height="160" src="img/snailtree_logo.png">
+			<h1 class="black-shadow">A tale of Madness and Hubris</h1>
+			<a href="#info"><img height="64" src="img/question_circle.png"></a>
+			<a href="https://etherscan.io/address/0x2A185c995373a766979E645D0912d30E27aa56f6" target="_blank"><img height="64" src="img/contract_circle.png"></a>
+			<a href="https://discord.gg/8h3Emyb" target="_blank"><img height="64" src="img/discord_circle.png"></a>
+			<a href="https://twitter.com/EtherSnailFarm" target="_blank"><img height="64" src="img/twitter_circle.png"></a>
+			<a href="https://reddit.com/r/snailthrone" target="_blank"><img height="64" src="img/reddit_circle.png"></a>
+			<a href="https://medium.com/@thesnailking/snailfarm-3-competitive-idlegame-on-ethereum-3fe32bf774c7" target="_blank"><img height="64" src="img/medium_circle.png"></a>
+			<a href="https://t.me/snailthrone" target="_blank"><img height="64" src="img/telegram_circle.png"></a>
+			<a href="https://snailking.github.io/snailthrone" target="_blank"><img height="64" src="img/snailthrone_circle.png"></a>
+		</div><br>
+		<!-- PROGRESS BAR -->
+		<div class="container" align="center">
+			<div class="container-social">
+				<h1 class="black-shadow">ROUND <span id="gameround">?</span></h1>
+			</div><br>
+			<h2 class="black-shadow pulse-text">GIVE PECAN #<span id="pecantowin">?</span> TO WIN <span id="roundpot">?</span> ETH</h1>
+			<h2 class="black-shadow">Plant a new Root for a bonus <span id="rootpecanforoneether">?</span> Pecans per ETH</h1><br>
+			<div class="progress" style="height: 40px;">
+				<div class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" id="progressbarpecan"><h5>0%</h5></div>
+			</div><br>
+			<div class="row">
+				<div class="col-sm" align="left">
+					<h3 class="black-shadow"><span id="pecangiven">?</span> Pecans Given</h2>
+				</div>
+				<div class="col-sm" align="right">
+					<h3 class="black-shadow"><span id="pecanleft">?</span> Pecans Left</h2>
+				</div>
+			</div>
+		</div>
+		<!-- WONKERS WINDOW. PYRAMID MADE OUT OF PECANS. WONKERS ON TOP CHOMPING ON NUTS. GIVE BUTTON. VERTICAL PROGRESS BAR ON SIDE. -->
+		<div class="container wonkers-container" align="center">
+			<img src="img/squirrel_crazy.png"><br><br>
+			<button class="btn btn-lg btn-success" onclick="webGivePecan()">GIVE PECAN</button><br><br>
+			<div class="row">
+				<div class="col-sm">
+					<h4 class="black-shadow">You have <span id="playerpecan">?</span> Pecans</h4>
+				</div>
+				<div class="col-sm">
+					<h4 class="black-shadow">Trade <input type="text" id="fieldPecan" value="1000" size="8"> Pecans</h4>
+				</div>
+				<div class="col-sm">
+					<h4 class="black-shadow">Receive <span id="tradereward">?</span> ETH</h4>
+				</div>
+			</div>
+			<br>
+		</div>
+		<!-- TREE WINDOW. SHOW STATS, BIG FONT -->
+		<div class="jumbotron"><br>
+			<div class="row">
+				<div class="col-sm-4" align="center">
+					<img class="wobble-hor-bottom" src="img/ethertree.png" height="256">
+				</div>
+				<div class="col-sm-8">
+					<h2 class="black-shadow" align="center"><span id="playertree">?</span> Tree Size | Growth Boost <span id="playerboost">?</span>x</h2><br>
+					<h2>Ether Share: <span id="playerethershare">?</span> ETH</h2><br>
+					<h2>Pecan Reward: <span id="playerpecanshare">?</span></h2><br>
+					<h2>Last Claimed: <span id="playerlastclaim">?</span></h2><br>
+				</div>
+			</div>
+		</div>
+		<!-- TREE ACTIONS. PLANT, GROW, CLAIM -->
+		<div class="container">
+			<div class="row">
+				<div class="col-sm" align="center">
+					<div class="container-beige">
+						<button class="btn btn-lg btn-success" onclick="webCheckClaim()">PLANT ROOT</button>
+					</div>
+					<h5 class="black-shadow">Spend <input type="text" id="fieldRoot" value="0.02" size="3"> ETH</p>
+					<h5 class="black-shadow">Get <span id="fieldpecanreward">?</span> Pecans</p>
+				</div>
+				<div class="col-sm" align="center">
+					<div class="container-beige">
+						<button class="btn btn-lg btn-success" onclick="webGrowTree()">GROW TREE</button>
+					</div>
+					<h5 class="black-shadow">Use unclaimed ETH to grow Size</h5>
+					<span id="boostready"><h5 class="black-shadow">Adds Boost once per hour</h5></span>
+				</div>
+				<div class="col-sm" align="center">
+					<div class="container-beige">
+						<button class="btn btn-lg btn-success" onclick="webHarvestShare()">HARVEST SHARE</button>
+					</div>
+					<h5 class="black-shadow">Get your ETH and Pecan rewards</p>
+					<h5 class="black-shadow">Claim before Planting any new Root!</p>
+				</div>
+			</div>
+		</div><br><br>
+		<!-- MODAL. IN CASE PLAYER HASN'T CLAIMED BEFORE BUY -->
+		<div id="claimmodal" class="modal">
+			<div class="jumbotron modal-content" align="center">
+				<h3 class="black-shadow">You have unclaimed ETH and Pecans.</h3><br>
+				<div class="container-beige">
+					<h5>Planting another Root will reset your accumulated ETH and Pecans to 0!</h5>
+					<h5>It's recommended you Grow your Tree or Claim your Share before Planting a new Root.</h5>
+				</div>
+				<div class="container" align="center">
+					<button type="button" class="btn btn-success" onclick="CloseModal()">Got it!</button>
+				</div>
+			</div>
+		</div>
+		<!-- EVENT LOG -->
+		<div class="jumbotron">
+			<h3>EVENTS</h3>
+			<div class="container-beige">
+				<div class="scroll-box" id="logboxscroll">
+					<span id="eventlog">Waiting for events...</span>
+				</div>
+			</div>
+		</div>
+		<!-- WITHDRAW AND PAY THRONE -->
+		<div class="container">
+			<div class="row">
+				<div class="col-sm">
+				<div class="container-beige">
+					<div class="row">
+						<div class="col-sm-8" align="left">
+							<h1><span id="playerbalance">?</span> ETH</h1>
+						</div>
+						<div class="col-sm-4" align="right">
+							<button class="btn btn-lg btn-success" onclick="webWithdrawBalance()">WITHDRAW</button>
+						</div>
+					</div>
+				</div>
+				<h5 class="black-shadow" align="center">Send your ETH to your personal wallet</h5>
+				</div>
+				<div class="col-sm">
+				<div class="container-beige">
+					<div class="row">
+						<div class="col-sm-4" align="left">
+							<button class="btn btn-lg btn-success" onclick="webPayThrone()">PAY THRONE</button>
+						</div>
+						<div class="col-sm-8" align="right">
+							<h1><span id="thronepot">?</span> ETH</h1>
+						</div>
+					</div>
+				</div>
+				<h5 class="black-shadow" align="center">Send throne ETH to SnailThrone holders</h5>
+				</div>
+			</div>
+		</div><br><br>
+		<!-- MISC STATS -->
+		<div class="jumbotron" align="center">
+			<h1 class="black-shadow">Statistics</h1>
+			<div class="container-beige">
+				<h2>Contract Balance: <span id="contractbalance">?</span> ETH</h2><br>
+				<div class="row">
+					<div class="col-sm">
+						<h3>TreePot: <span id="treepot">?</span> ETH</h3>
+						<h5>The TreePot consistently pays out according to Tree Size</h5>
+					</div>
+					<div class="col-sm">
+						<h3>WonkPot: <span id="wonkpot">?</span> ETH</h3>
+						<h5>The WonkPot gives out Ether for Pecans</h5>
+					</div>
+					<div class="col-sm">
+						<h3>JackPot: <span id="jackpot">?</span> ETH</h3>
+						<h5>50% of the JackPot is used as Round reward</h5>
+					</div>
+				</div><br>
+				<h2>Last Root Planted: <span id="lastrootplant">?</span></h5>
+			</div>
+		</div><br>
+		<!-- COMMUNITY -->
+		<div class="container" align="center">
+			<h1 class="black-shadow">JOIN THE SNAILTHRONE COMMUNITY</h1><br>
+			<div class="row">
+				<div class="col-sm">
+					<a href="https://discord.gg/8h3Emyb" target="_blank"><img height="64" src="img/discord_circle.png"></a>
+				</div>
+				<div class="col-sm">
+					<a href="https://twitter.com/EtherSnailFarm" target="_blank"><img height="64" src="img/twitter_circle.png"></a>					
+				</div>
+				<div class="col-sm">
+					<a href="https://t.me/snailthrone" target="_blank"><img height="64" src="img/telegram_circle.png"></a>
+				</div>
+				<div class="col-sm">
+					<a href="https://snailking.github.io/snailthrone" target="_blank"><img height="64" src="img/snailthrone_circle.png"></a>
+				</div>
+				<div class="col-sm">
+					<a href="https://medium.com/@thesnailking/snailfarm-3-competitive-idlegame-on-ethereum-3fe32bf774c7" target="_blank"><img height="64" src="img/medium_circle.png"></a>
+				</div>
+				<div class="col-sm">
+					<a href="https://reddit.com/r/snailthrone" target="_blank"><img height="64" src="img/reddit_circle.png"></a>
+				</div>
+			</div>
+		</div><br>
+		<!-- GAME INFO -->
+		<div class="jumbotron" align="center">
+			<h1 id="info" class="black-shadow">QUICK START</h1>
+			<div class="container-beige">
+				<br><h3 class="black-shadow"><b>SnailTree is a mock HYIP where you grow your tree for rewards</b></h5>
+				<br><h5><b>It all starts by Planting a Root</b></h5>
+				<h5>In exchange, you get a Tree of a Size proportional to the ETH spent.</h5>
+				<br><h5><b>Planting a Root immediately rewards you with Pecans</b></h5>
+				<h5>The longer anyone goes without Planting a Root, the bigger Pecan reward.</h5>
+				<br><h5><b>Your Tree consistently produces Ether</b></h5>
+				<h5>Based on Size, 4% per day of the ETH value of your Tree.</h5>
+				<br><h5><b>Your Tree also produces Pecans</b></h5>
+				<h5>Pecans are produced slowly at first, then faster the longer you go without Harvesting.</h5>
+				<br><h5><b>Harvest your Share to receive ETH and Pecans</b></h5>
+				<h5>This can be done at any point, and as often as you want. But...</h5>
+				<br><h3 class="black-shadow"><b>The longer you wait, the more Pecans you get!</b></h5>
+				<br><h5><b>Trade Pecans with Wonkers and get Ether</b></h5>
+				<h5>Giving Pecans also raises the shared progress bar.</h5>
+				<br><h5><b>Give the last Pecan to win the round</b></h5>
+				<h5>If your gift fills the bar, you win the jackpot!</h5>
+				<br><h5><b>As more Trees are planted, Wonkers needs more Pecans</b></h5>
+				<h5>The amount required is in direct proportion with ETH spent on Planting Roots.</h5>
+				<br><h3 class="black-shadow"><b>Next step: Growing your Tree</b></h5>
+				<br><h5><b>Use your Share to Grow your Tree</b></h5>
+				<h5>The Ether you would have gotten is reinvested to raise your Tree Size.</h5>
+				<br><h5><b>Increase your Growth Boost</b></h5>
+				<h5>For every hour since your last claim, Growing your Tree gives you one extra boost.</h5>
+				<br><h5><b>Your Boost multiplies your Pecan claims</b></h5>
+				<h5>Whether from Grow Tree or Harvest Share.</h5>
+				<br><h3 class="black-shadow"><b>End of a Round</b></h5>
+				<br><h5><b>After Winter comes Spring</b></h5>
+				<h5>When a player wins the round, the game immediately moves to the next round.</h5>
+				<br><h5><b>Trees get cut, Boosts are reset</b></h5>
+				<h5>On the next action a player takes, Tree Size is reduced by 20% and Boost is reset to 1.</h5>
+				<br><h5><b>SnailTree runs forever</b></h5>
+				<h5>The game doesn't stop and will go on indefinitely on the Ethereum blockchain.</h5><br>
+				<br><h3 class="black-shadow"><b>The SnailThrone</b></h5>
+				<br><h5>SnailTree is part of the SnailThrone ecosystem.</h5>
+				<h5>10% of all ETH invested goes into a pot to pay out SnailThrone holders.</h5>
+				<h5>Anyone can send this pot at any moment.</h5><br>
+				<a href="https://snailking.github.io/snailthrone" target="_blank"><h4><b>Check out SnailThrone here</b></h4></a>
+			</div>
+			<a href="#top"><img height="48" src="img/arrow_circle.png"></a>
+		</div><br>
+		<!-- GAME MECHANICS -->
+		<div class="jumbotron">
+			<h1 class="black-shadow" align="center">GAME MECHANICS</h1>
+			<h4><b>Plant Root</b></h4>
+			<div class="container-beige">
+				<p>Plant Root gives you 0.0000005 Tree Size per ETH, which translates to a Size of 2 000 for 1 finney, and a Size of 2 000 000 for 1 ETH.</p>
+				<p>The minimum requirement to Plant a Root is 1 finney (0.001 ETH).</p><br>
+				<p>Plant Root gives you 1 Pecan per Tree Size, multiplied by the global bonus.</p>
+				<p>The global bonus increases by +0.5% for every second since anyone Planted a Root.</p>
+				<p>For example, Planting a Root with 1 ETH after 1 hour (3600 seconds) would give you: 2MM * (100% + 0.5% * 3600) = 38MM Pecans.</p><br>
+				<p>Planting a Root forfeits any unclaimed Harvest!</p>
+			</div>
+			<h4><b>Harvest Share</b></h4>
+			<div class="container-beige">
+				<p>Harvest Share transfers unclaimed ETH to the player's ingame balance.</p>
+				<p>ETH rewards accumulate at a rate of 4% of the Tree Size value per day.</p><br>
+				<p>Harvest Share gives 1 Pecan per Tree Size per day, multiplied by personal bonus and Boost.</p>
+				<p>The personal bonus starts at 4, and increases by 1 per hour since the player's last Tree action (Plant, Grow or Harvest).</p>
+				<p>The Boost is a fixed multiplier obtained through Grow Tree.</p>
+				<p>For example, Harvesting with a Tree Size of 2MM and a Boost of 1 after 1 hour (3600 seconds) would give you: 2MM * 1 * (4 + 1) / 86400 = 416 666 Pecans</p>
+			</div>
+			<h4><b>Grow Tree</b></h4>
+			<div class="container-beige">
+				<p>Grow Tree uses the Ether share to grow Tree Size at a rate identical to Plant Root.</p>
+				<p>The player also receives the same amount of Pecans as for Harvest Share.</p><br>
+				<p>If it has been at least one hour since the player's last Tree action, the player gets a Boost.</p>
+				<p>For each extra hour, the player also gets a Boost.</p>
+				<p>For example, Growing the Tree after 5 hours 30 minutes will give the player +5 Boost.</p>
+			</div>
+			<h4><b>Give Pecan</b></h4>
+			<div class="container-beige">
+				<p>Give Pecan trades as many Pecans as the player wants and sends ETH in return.</p>
+				<p>ETH received is equal to: (Wonkers' Pot) * (Pecan Gift) / (Pecans To Win) / 2.</p>
+				<p>No more than 50% of the wonkPot can be won in one gift.</p><br>
+				<p>Pecans from the gift are added to the global Pecans Given variable.</p>
+				<p>If Pecans Given surpass Pecans To Win, the player wins the round.</p>
+				<p>He receives this round's jackpot (50% of the reserve jackpot), and the next round begins.</p>
+			</div>
+			<h4><b>New Round</b></h4>
+			<div class="container-beige">
+				<p>Pecans Given reset to 0, and Pecans To Win are set according to the jackpot.</p>
+				<p>Pecans to Win = 1 Billion for 0.1 ETH in the Jackpot (or 10MM for 1 finney).</p>
+				<p>Both the jackpot and Pecans to Win change dynamically through the round as players Plant Roots.</p><br>
+				<p>The first time a player from a previous round takes an action, their Boost is reset to 0.</p>
+				<p>Their Tree Size is also lowered by 20% for every round they've skipped.</p>
+				<p>For example, if we're at Round 3 and a Round 1 player didn't play Round 2, their Tree Size of 4000 will become 4000 * 0.8 * 0.8 = 2560</p><br>
+				<p>Unclaimed share remains available, but in proportion with the new Tree Size.</p>
+				<p>It's best to Harvest before the round ends!</p>
+			</div>
+			<h4><b>Pot Split</b></h4>
+			<div class="container-beige">
+				<p>On every payable transaction, the incoming Ether is split as follows:</p><br>
+				<p>- 40% to the treePot, holds payouts from Tree Size</p>
+				<p>- 30% to the wonkPot, reserve for Pecan Trades</p>
+				<p>- 20% to the jackPot, half of it rewarded to the Round winner</p>
+				<p>- 10% to the thronePot, to be sent to SnailThrone owners at your convenience</p>
+			</div>
+			<div class="container" align="center">
+				<a href="#top"><img height="48" src="img/arrow_circle.png"></a>
+			</div>
+		</div>
+		<!-- JAVASCRIPT -->
+		<script src="snailtree_5.js"></script>				
+		<script>
+			initUpdate();
+		</script>		
+	</body>
+</html>

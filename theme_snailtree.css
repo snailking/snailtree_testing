@@ -58,6 +58,13 @@ body {
 	margin: 1rem;
 }
 
+.container-social {
+	background-color: #8eb6bf;
+	color: black;
+	position: center;
+	padding: 0.5rem 0.5rem;
+}
+
 .black-shadow {
 	color: white;
 	text-shadow:
