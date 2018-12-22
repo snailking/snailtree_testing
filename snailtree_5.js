@@ -1,4 +1,4 @@
-var contractAddress="0xCA503815eA54Ad72460C8ad4B8C8a7d49Ef38d88";
+var contractAddress="0xce98F8f703BC4D6AFBda96D1CF4B5da28756Cb4B";
 
 /* WEB3 DETECTION */
 // TESTNET!!
@@ -140,20 +140,22 @@ function timeSincePlayerClaim(){
 	
 	downtime_hours = Math.floor(a_timeSincePlayerClaim / 3600);
 	downtime_minutes = Math.floor((a_timeSincePlayerClaim % 3600) / 60);
-	downtime_seconds = parseFloat((a_timeSincePlayerClaim % 3600) % 60).toFixed(0);
+	//downtime_seconds = parseFloat((a_timeSincePlayerClaim % 3600) % 60).toFixed(0);
 	
 	doc_playerLastClaim.innerHTML = "";
 	doc_boostReady.innerHTML = "<h5 class='black-shadow'>Adds Boost once per hour</h5>";
 	
-	if(downtime_minutes > 0){
-		doc_playerLastClaim.innerHTML += downtime_minutes + " Minute(s) ago";
-	} else {
-		doc_playerLastClaim.innerHTML += "A few moments ago";
-	}	
 	if(downtime_hours > 0){
-		doc_playerLastClaim.innerHTML = downtime_hours + " Hour(s) ago. Boost ready!";
+		doc_playerLastClaim.innerHTML += downtime_hours + " Hour(s) ";
 		doc_boostReady.innerHTML = "<h5 class='black-shadow pulse-text'>[BOOST READY]</h5>";
 	}
+	if(downtime_minutes > 0){
+		doc_playerLastClaim.innerHTML += downtime_minutes + " Minute(s) ";
+	} 
+	if(downtime_hours == 0 && downtime_minutes == 0){
+		doc_playerLastClaim.innerHTML += "A few moments ";
+	}	
+	doc_playerLastClaim.innerHTML += " ago.";
 }
 
 /* UPDATE */
