@@ -460,7 +460,7 @@ function webPlantRoot(){
 function webCheckTime(){
 	var _now = Math.round((new Date()).getTime() / 1000);
 	var _timeSinceLast = parseFloat(_now - a_playerLastClaim);
-	if(_timeSinceLast < 3600){
+	if(_timeSinceLast < 3800){
 		grow_modal.style.display = "block";
 	} else {
 		webGrowTree();
