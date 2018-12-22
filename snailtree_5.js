@@ -27,18 +27,21 @@ window.addEventListener("load", function() {
 
 /* MODAL */
 
-// Get the modal
+// Get the modals
 var claim_modal = document.getElementById("claimmodal");
+var grow_modal = document.getElementById("growmodal");
 
 // Close modal on game info
 function CloseModal() {
 	claim_modal.style.display = "none";
+	grow_modal.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-    if (event.target == claim_modal) {
+    if (event.target == claim_modal || event.target == grow_modal) {
         claim_modal.style.display = "none";
+		grow_modal.style.display = "none";
     }
 }
 
@@ -449,6 +452,17 @@ function webPlantRoot(){
 	var weitospend = web3.toWei(f_root,'ether');
 	PlantRoot(weitospend, function(){
 	});
+}
+
+//Check first if it has been at least one hour since last player action
+function webCheckTime(){
+	var _now = Math.round((new Date()).getTime() / 1000);
+	var _timeSinceLast = parseFloat(_now - a_playerLastClaim);
+	if(_timeSinceLast < 3600){
+		grow_modal.style.display = "block";
+	} else {
+		webGrowTree();
+	}
 }
 
 //Grow tree

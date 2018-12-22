@@ -91,7 +91,7 @@
 					<div class="container-beige">
 						<button class="btn btn-lg btn-success" onclick="webGrowTree()">GROW TREE</button>
 					</div>
-					<h5 class="black-shadow">Use unclaimed ETH to grow Size</h5>
+					<h5 class="black-shadow">Use Ether Share to grow Size</h5>
 					<span id="boostready"><h5 class="black-shadow">Adds Boost once per hour</h5></span>
 				</div>
 				<div class="col-sm" align="center">
@@ -112,7 +112,21 @@
 					<h5>It's recommended you Grow your Tree or Claim your Share before Planting a new Root.</h5>
 				</div>
 				<div class="container" align="center">
-					<button type="button" class="btn btn-success" onclick="CloseModal()">Got it!</button>
+					<button type="button" class="btn btn-success" onclick="CloseModal()">Cancel</button>
+					<button type="button" class="btn btn-success" onclick="webPlantRoot()">Plant Root</button>
+				</div>
+			</div>
+		</div>
+		<!-- MODAL. FOR GROWTH BEFORE 1 HOUR -->
+		<div id="growmodal" class="modal">
+			<div class="jumbotron modal-content" align="center">
+				<h3 class="black-shadow">It has been less than 1 Hour since your last Tree action.</h3><br>
+				<div class="container-beige">
+					<h5>If you Grow your Tree now, you will not get an extra Boost!</h5>
+				</div>
+				<div class="container" align="center">
+					<button type="button" class="btn btn-success" onclick="CloseModal()">Cancel</button>
+					<button type="button" class="btn btn-success" onclick="webGrowTree()">Grow Tree</button>
 				</div>
 			</div>
 		</div>
