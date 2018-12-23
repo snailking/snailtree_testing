@@ -158,6 +158,12 @@ function timeSincePlayerClaim(){
 	doc_playerLastClaim.innerHTML += " ago.";
 }
 
+//Fill up the field with player pecans
+function maxField(){
+	f_pecan = a_playerPecan;
+	document.getElementById('fieldPecan').value = f_pecan;
+}
+
 /* UPDATE */
 
 function initUpdate(){

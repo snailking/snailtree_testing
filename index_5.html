@@ -32,8 +32,8 @@
 			<div class="container-social">
 				<h1 class="black-shadow">ROUND <span id="gameround">?</span></h1>
 			</div><br>
-			<h2 class="black-shadow pulse-text">GIVE PECAN #<span id="pecantowin">?</span> TO WIN <span id="roundpot">?</span> ETH</h1>
-			<h2 class="black-shadow">Plant a new Root for a bonus <span id="rootpecanforoneether">?</span> Pecans per ETH</h1><br>
+			<h2 class="black-shadow pulse-text">GIVE PECAN #<span id="pecantowin">?</span> TO WIN <span id="roundpot">?</span> ETH</h2><br>
+			
 			<div class="progress" style="height: 40px;">
 				<div class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" id="progressbarpecan"><h5>0%</h5></div>
 			</div><br>
@@ -55,7 +55,8 @@
 					<h4 class="black-shadow">You have <span id="playerpecan">?</span> Pecans</h4>
 				</div>
 				<div class="col-sm">
-					<h4 class="black-shadow">Trade <input type="text" id="fieldPecan" value="1000" size="8"> Pecans</h4>
+					<h4 class="black-shadow">Trade <input type="text" id="fieldPecan" value="1000000" size="8"> Pecans</h4>
+					<button class="btn-success" onclick="maxField">Max</button>
 				</div>
 				<div class="col-sm">
 					<h4 class="black-shadow">Receive <span id="tradereward">?</span> ETH</h4>
@@ -63,7 +64,10 @@
 			</div>
 			<br>
 		</div>
-		<!-- TREE WINDOW. SHOW STATS, BIG FONT -->
+		<div class="container" align="center">
+			<h2 class="black-shadow">PLANT A NEW ROOT TO GET <span id="rootpecanforoneether">?</span> PECANS PER ETH</h2><br>
+		</div>
+		<!-- TREE WINDOW. SHOW STATS, BIG FONT -->	
 		<div class="jumbotron"><br>
 			<div class="row">
 				<div class="col-sm-4" align="center">
