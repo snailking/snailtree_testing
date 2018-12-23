@@ -146,19 +146,24 @@ function timeSincePlayerClaim(){
 	doc_boostReady.innerHTML = "<h5 class='black-shadow'>Adds Boost once per hour</h5>";
 	
 	if(downtime_hours > 0){
-		doc_playerLastClaim.innerHTML += downtime_hours + " Hour(s) ";
+		doc_playerLastClaim.innerHTML = downtime_hours + " Hours ";
 		doc_boostReady.innerHTML = "<h5 class='black-shadow pulse-text'>[BOOST READY]</h5>";
+		if(downtime_hours == 1){
+			doc_playerLastClaim.innerHTML = downtime_hours + " Hour ";
 		if(downtime_hours > 9){
 			doc_boostReady.innerHTML = "<h4 class='black-shadow pulse-text'>[!MAXIMUM BOOST READY!]</h4>";
 		}
 	}
-	if(downtime_minutes > 0){
-		doc_playerLastClaim.innerHTML += downtime_minutes + " Minute(s) ";
+	if(downtime_minutes == 1){
+		doc_playerLastClaim.innerHTML += downtime_minutes + " Minute ";
+	}
+	if(downtime_minutes > 1){
+		doc_playerLastClaim.innerHTML += downtime_minutes + " Minutes ";
 	} 
 	if(downtime_hours == 0 && downtime_minutes == 0){
 		doc_playerLastClaim.innerHTML += "A few moments ";
 	}	
-	doc_playerLastClaim.innerHTML += " ago.";
+	doc_playerLastClaim.innerHTML += " ago";
 }
 
 //Fill up the field with player pecans

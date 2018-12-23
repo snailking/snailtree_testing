@@ -1,3 +1,11 @@
+a {
+	color: white;
+}
+
+a:hover{
+	text-decoration: none;
+}
+
 p {
 	margin: 0px;
 	padding: 0px;
@@ -11,6 +19,10 @@ body {
 	background-attachment: fixed;
 }
 
+.container-poem{
+	margin-left: 6rem;
+	margin-right: 6rem;
+}
 
 .jumbotron {
 	background-color: #316570; /*#e8e6b6;*/
