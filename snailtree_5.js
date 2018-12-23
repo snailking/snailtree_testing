@@ -161,7 +161,7 @@ function timeSincePlayerClaim(){
 //Fill up the field with player pecans
 function maxField(){
 	f_pecan = a_playerPecan;
-	document.getElementById('fieldPecan').value = f_pecan;
+	document.getElementById('fieldPecan').innerHTML = a_playerPecan;
 }
 
 /* UPDATE */
