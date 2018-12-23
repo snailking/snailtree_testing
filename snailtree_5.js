@@ -148,6 +148,9 @@ function timeSincePlayerClaim(){
 	if(downtime_hours > 0){
 		doc_playerLastClaim.innerHTML += downtime_hours + " Hour(s) ";
 		doc_boostReady.innerHTML = "<h5 class='black-shadow pulse-text'>[BOOST READY]</h5>";
+		if(downtime_hours > 9){
+			doc_boostReady.innerHTML = "<h4 class='black-shadow pulse-text'>[!MAXIMUM BOOST READY!]</h4>";
+		}
 	}
 	if(downtime_minutes > 0){
 		doc_playerLastClaim.innerHTML += downtime_minutes + " Minute(s) ";
