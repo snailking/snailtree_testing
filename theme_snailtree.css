@@ -19,6 +19,11 @@ body {
 	background-attachment: fixed;
 }
 
+.testimonial{
+	height: 128px;
+	border: 4px solid #FFFFFF;
+}
+
 .container-poem{
 	margin-left: 6rem;
 	margin-right: 6rem;

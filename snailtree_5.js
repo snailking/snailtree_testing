@@ -268,7 +268,7 @@ function computeLastRootPlant(){
 
 function computeProgressBar(){
 	var _state = parseFloat(a_pecanGiven / a_pecanToWin).toFixed(2);
-	var _result = (_state * 100) + '%';
+	var _result = Math.floor(_state * 100) + '%';
 	doc_progressBar.style.width = _result;
 	doc_progressBar.innerHTML = _result;
 }
