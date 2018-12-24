@@ -150,6 +150,7 @@ function timeSincePlayerClaim(){
 		doc_boostReady.innerHTML = "<h5 class='black-shadow pulse-text'>[BOOST READY]</h5>";
 		if(downtime_hours == 1){
 			doc_playerLastClaim.innerHTML = downtime_hours + " Hour ";
+		}
 		if(downtime_hours > 9){
 			doc_boostReady.innerHTML = "<h4 class='black-shadow pulse-text'>[!MAXIMUM BOOST READY!]</h4>";
 		}
