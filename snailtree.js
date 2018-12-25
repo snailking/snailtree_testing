@@ -148,20 +148,25 @@ function date24() {
 	datetext = datetext.split(' ')[0];
 }
 
+//Unique check for prelaunch
+function checkLaunch(){
+	var blocktime = Math.round((new Date()).getTime() / 1000); //current blocktime should be Unix timestamp
+	if(blocktime < timeLaunch){
+		prelaunch_modal.style.display = "block";
+	}
+}
+
 //Prelaunch timer
 function prelaunchTimer(){
 	var blocktime = Math.round((new Date()).getTime() / 1000); //current blocktime should be Unix timestamp
 	_timeLeft = timeLaunch - blocktime;
-	if(_timeLeft > 0){
-		prelaunch_modal.style.display = "block";
-	}
 	
 	downtime_hours = Math.floor(_timeLeft / 3600);
 	downtime_minutes = Math.floor((_timeLeft % 3600) / 60);
 	downtime_seconds = Math.floor((_timeLeft % 3600) % 60);
-	if(downtime_hours > 10) { downtime_hours = "0" + downtime_hours; }
-	if(downtime_minutes > 10) { downtime_minutes = "0" + downtime_minutes; }
-	if(downtime_seconds > 10) { downtime_seconds = "0" + downtime_seconds; }
+	if(downtime_hours < 10) { downtime_hours = "0" + downtime_hours; }
+	if(downtime_minutes < 10) { downtime_minutes = "0" + downtime_minutes; }
+	if(downtime_seconds < 10) { downtime_seconds = "0" + downtime_seconds; }
 	
 	doc_launchTimer.innerHTML = downtime_hours + ":" + downtime_minutes + ":" + downtime_seconds;
 }
@@ -211,6 +216,7 @@ function maxField(){
 function initUpdate(){
 	slowUpdate();
 	fastUpdate();
+	checkLaunch();
 }	
 
 function slowUpdate(){
