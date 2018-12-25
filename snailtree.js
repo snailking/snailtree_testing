@@ -33,6 +33,7 @@ var grow_modal = document.getElementById("growmodal");
 var root_modal = document.getElementById("rootmodal");
 var toolow_modal = document.getElementById("toolowmodal");
 var pecan_modal = document.getElementById("pecanmodal");
+var prelaunch_modal = document.getElementById("prelaunchmodal");
 
 // Close modal on game info
 function CloseModal() {
@@ -41,22 +42,25 @@ function CloseModal() {
 	root_modal.style.display = "none";
 	toolow_modal.style.display = "none";
 	pecan_modal.style.display = "none";
+	prelaunch_modal.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-    if (event.target == claim_modal || event.target == grow_modal || event.target == root_modal || event.target == toolow_modal || event.target == pecan_modal) {
+    if (event.target == claim_modal || event.target == grow_modal || event.target == root_modal || event.target == toolow_modal || event.target == pecan_modal || event.target == prelaunch_modal) {
         claim_modal.style.display = "none";
 		grow_modal.style.display = "none";
 		root_modal.style.display = "none";
 		toolow_modal.style.display = "none";
 		pecan_modal.style.display = "none";
+		prelaunch_modal.style.display = "none;"
     }
 }
 
 /* VARIABLES */
 
 var timeNow;
+var timeLaunch = 1546099321;
 
 var a_contractBalance;
 var a_gameRound;
@@ -111,6 +115,7 @@ var doc_tradeReward2 = document.getElementById('tradereward2');
 var doc_progressBar = document.getElementById('progressbarpecan');
 var doc_fieldPecanReward = document.getElementById('fieldpecanreward');
 var doc_boostReady = document.getElementById('boostready');
+var doc_launchTimer = document.getElementById('launchtimer');
 
 /* UTILITIES */
 
@@ -143,6 +148,24 @@ function date24() {
 	datetext = datetext.split(' ')[0];
 }
 
+//Prelaunch timer
+function prelaunchTimer(){
+	var blocktime = Math.round((new Date()).getTime() / 1000); //current blocktime should be Unix timestamp
+	_timeLeft = timeLaunch - blocktime;
+	if(_timeLeft > 0){
+		prelaunch_modal.style.display = "block";
+	}
+	
+	downtime_hours = Math.floor(_timeLeft / 3600);
+	downtime_minutes = Math.floor((_timeLeft % 3600) / 60);
+	downtime_seconds = Math.floor((_timeLeft % 3600) % 60);
+	if(downtime_hours > 10) { downtime_hours = "0" + downtime_hours; }
+	if(downtime_minutes > 10) { downtime_minutes = "0" + downtime_minutes; }
+	if(downtime_seconds > 10) { downtime_seconds = "0" + downtime_seconds; }
+	
+	doc_launchTimer.innerHTML = downtime_hours + ":" + downtime_minutes + ":" + downtime_seconds;
+}
+	
 //Time since player claim, converted to text
 function timeSincePlayerClaim(){
 	var blocktime = Math.round((new Date()).getTime() / 1000); //current blocktime should be Unix timestamp
@@ -223,6 +246,7 @@ function fastUpdate(){
 	fastupdateEtherShare();
 	fastupdatePecanShare();
 	computeWonkWonk();
+	prelaunchTimer();
 	setTimeout(fastUpdate, 100);
 }
 
@@ -463,8 +487,7 @@ function updateRootPecan(){
 //Check number of Pecans isn't above player max
 function webCheckPecan(){
 	if(f_pecan > a_playerPecan){
-		f_pecan = a_playerPecan;
-		document.getElementById('fieldPecan').value = a_playerPecan;
+		maxField();
 		pecan_modal.style.display = "block";
 	} else {
 		webGivePecan();
