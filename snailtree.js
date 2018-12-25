@@ -28,9 +28,9 @@ window.addEventListener("load", function() {
 /* MODAL */
 
 // Get the modals
-var root_modal = document.getElementById("rootmodal");
 var claim_modal = document.getElementById("claimmodal");
 var grow_modal = document.getElementById("growmodal");
+var root_modal = document.getElementById("rootmodal");
 var toolow_modal = document.getElementById("toolowmodal");
 
 // Close modal on game info
@@ -464,7 +464,7 @@ function webGivePecan(){
 //On other actions, make sure the player has already planted a root 
 function webCheckRoot(_func){
 	if(a_playerTree == 0){
-		plant_modal.style.display = "block";
+		root_modal.style.display = "block";
 	} else {
 		_func();
 	}
