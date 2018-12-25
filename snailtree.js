@@ -1,4 +1,4 @@
-contractAddress="0x95e4D9C023adf01e8e8e83669F0c8B948B985B14"
+var contractAddress="0x92D8874b42b19CeC5061036981373E1484C17016";
 
 /* WEB3 DETECTION */
 // TESTNET!!
@@ -10,22 +10,44 @@ window.addEventListener("load", function() {
         web3.version.getNetwork(function(error, result) {
             if (!error) {
                 if (result == "3") {
-					//console.log("Mainnet successfully loaded!");
+					//////console.log("Mainnet successfully loaded!");
                 } else {
-                    //console.log("You must be on the Testnet to play SnailFarm 3!");
+                    //////console.log("You must be on the Testnet to play SnailFarm 3!");
 					web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/f423492af8504d94979d522c3fbf3794"));
 					//modal2.style.display = "block";
                 }
             }
         });
     } else {
-        //console.log("Web3 library not found.");
+        //////console.log("Web3 library not found.");
 		//modal2.style.display = "block";
         web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/f423492af8504d94979d522c3fbf3794"));
     }
 });
 
+/* MODAL */
+
+// Get the modals
+var claim_modal = document.getElementById("claimmodal");
+var grow_modal = document.getElementById("growmodal");
+
+// Close modal on game info
+function CloseModal() {
+	claim_modal.style.display = "none";
+	grow_modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == claim_modal || event.target == grow_modal) {
+        claim_modal.style.display = "none";
+		grow_modal.style.display = "none";
+    }
+}
+
 /* VARIABLES */
+
+var timeNow;
 
 var a_contractBalance;
 var a_gameRound;
@@ -34,18 +56,20 @@ var a_treePot;
 var a_wonkPot;
 var a_thronePot;
 var a_jackPot;
-var a_pecanToWin;
-var a_pecanGiven;
-var a_pecanLeft;
+var a_pecanToWin = 0;
+var a_pecanGiven = 0;
+var a_pecanLeft = 0;
 var a_lastRootPlant;
 var a_playerBalance;
 var a_playerRound;
-var a_playerTree;
-var a_playerPecan;
+var a_playerBoost;
+var a_playerTree = 0;
+var a_playerPecan = 0;
 var a_playerLastClaim;
 var a_playerEtherShare;
-var a_playerPecanShare;
-var a_rootPecanForOneEther;
+var a_playerPecanShare = 0;
+var a_rootPecanForOneEther = 0;
+var a_tradeReward;
 
 var f_pecan;
 var f_root;
@@ -61,18 +85,93 @@ var doc_thronePot = document.getElementById('thronepot');
 var doc_jackPot = document.getElementById('jackpot');
 var doc_pecanToWin = document.getElementById('pecantowin');
 var doc_pecanGiven = document.getElementById('pecangiven');
+var doc_pecanLeft = document.getElementById('pecanleft');
 var doc_lastRootPlant = document.getElementById('lastrootplant');
 var doc_playerBalance = document.getElementById('playerbalance');
-var doc_playerRound = document.getElementById('playerround');
+var doc_playerBoost = document.getElementById('playerboost');
 var doc_playerTree = document.getElementById('playertree');
 var doc_playerPecan = document.getElementById('playerpecan');
 var	doc_playerEtherShare = document.getElementById('playerethershare');
 var	doc_playerPecanShare = document.getElementById('playerpecanshare');
 var	doc_rootPecanForOneEther = document.getElementById('rootpecanforoneether');
-//var doc_playerLastClaim = document.getElementById('playerlastclaim');
-var doc_fieldpecan = document.getElementById('fieldPecan');
-var doc_fieldroot = document.getElementById('fieldRoot');
+var doc_playerLastClaim = document.getElementById('playerlastclaim');
+var doc_fieldPecan = document.getElementById('fieldPecan');
+var doc_fieldRoot = document.getElementById('fieldRoot');
+var doc_tradeReward = document.getElementById('tradereward');
+var doc_progressBar = document.getElementById('progressbarpecan');
+var doc_fieldPecanReward = document.getElementById('fieldpecanreward');
+var doc_boostReady = document.getElementById('boostready');
 
+/* UTILITIES */
+
+//Truncates ETH value to 4 decimals
+function formatEthValue(ethstr){
+    return parseFloat(parseFloat(ethstr).toFixed(4));
+}
+
+//Truncates ETH value to 6 decimals
+function formatEthValue2(ethstr){
+	return parseFloat(parseFloat(ethstr).toFixed(6));
+}
+
+//Truncates ETH address to first 8 numbers
+function formatEthAdr(adr){
+	return adr.substring(0, 10);
+}
+
+//Adds spaces between integers
+function numberWithSpaces(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
+//Conversion of Date to hh:mm:ss
+var datetext;
+
+function date24() {
+	d = new Date();
+	datetext = d.toTimeString();
+	datetext = datetext.split(' ')[0];
+}
+
+//Time since player claim, converted to text
+function timeSincePlayerClaim(){
+	var blocktime = Math.round((new Date()).getTime() / 1000); //current blocktime should be Unix timestamp
+	a_timeSincePlayerClaim = blocktime - a_playerLastClaim;
+	
+	downtime_hours = Math.floor(a_timeSincePlayerClaim / 3600);
+	downtime_minutes = Math.floor((a_timeSincePlayerClaim % 3600) / 60);
+	//downtime_seconds = parseFloat((a_timeSincePlayerClaim % 3600) % 60).toFixed(0);
+	
+	doc_playerLastClaim.innerHTML = "";
+	doc_boostReady.innerHTML = "<h5 class='black-shadow'>Adds Boost once per hour</h5>";
+	
+	if(downtime_hours > 0){
+		doc_playerLastClaim.innerHTML = downtime_hours + " Hours ";
+		doc_boostReady.innerHTML = "<h5 class='black-shadow pulse-text'>[BOOST READY]</h5>";
+		if(downtime_hours == 1){
+			doc_playerLastClaim.innerHTML = downtime_hours + " Hour ";
+		}
+		if(downtime_hours > 9){
+			doc_boostReady.innerHTML = "<h4 class='black-shadow pulse-text'>[!MAXIMUM BOOST READY!]</h4>";
+		}
+	}
+	if(downtime_minutes == 1){
+		doc_playerLastClaim.innerHTML += downtime_minutes + " Minute ";
+	}
+	if(downtime_minutes > 1){
+		doc_playerLastClaim.innerHTML += downtime_minutes + " Minutes ";
+	} 
+	if(downtime_hours == 0 && downtime_minutes == 0){
+		doc_playerLastClaim.innerHTML += "A few moments ";
+	}	
+	doc_playerLastClaim.innerHTML += " ago";
+}
+
+//Fill up the field with player pecans
+function maxField(){
+	f_pecan = a_playerPecan;
+	document.getElementById('fieldPecan').value = a_playerPecan;
+}
 
 /* UPDATE */
 
@@ -94,12 +193,16 @@ function slowUpdate(){
 	updateLastRootPlant();
 	updatePlayerBalance();
 	updatePlayerRound();
+	updatePlayerBoost();
 	updatePlayerTree();
 	updatePlayerPecan();
+	updatePlayerClaim();
 	updatePlayerEtherShare();
 	updatePlayerPecanShare();
 	updateRootPecan();
-	//updatePlayerClaim();
+	updatePlayerClaim();
+	computePecanLeft();
+	computeProgressBar();
 	updateText();
 	setTimeout(slowUpdate, 4000);
 }
@@ -107,6 +210,9 @@ function slowUpdate(){
 function fastUpdate(){
 	updateField();
 	fastupdateRootPecan();
+	fastupdateEtherShare();
+	fastupdatePecanShare();
+	computeWonkWonk();
 	setTimeout(fastUpdate, 100);
 }
 
@@ -114,39 +220,29 @@ function fastUpdate(){
 function updateText(){
 	doc_contractBalance.innerHTML = a_contractBalance;
 	doc_gameRound.innerHTML = a_gameRound;
-	doc_roundPot.innerHTML = (a_jackPot / 5).toFixed(4);
+	doc_roundPot.innerHTML = (a_jackPot / 2).toFixed(4);
 	doc_treePot.innerHTML = a_treePot;
 	doc_wonkPot.innerHTML = a_wonkPot;
 	doc_thronePot.innerHTML = a_thronePot;
 	doc_jackPot.innerHTML = a_jackPot;
-	doc_pecanToWin.innerHTML = a_pecanToWin;
-	doc_pecanGiven.innerHTML = a_pecanGiven;
+	doc_pecanToWin.innerHTML = numberWithSpaces(a_pecanToWin);
+	doc_pecanGiven.innerHTML = numberWithSpaces(a_pecanGiven);
+	doc_pecanLeft.innerHTML = numberWithSpaces(a_pecanLeft);
 	doc_lastRootPlant.innerHTML = computeLastRootPlant();
 	doc_playerBalance.innerHTML = a_playerBalance;
-	doc_playerRound.innerHTML = a_playerRound;
-	doc_playerTree.innerHTML = a_playerTree;
-	doc_playerPecan.innerHTML = a_playerPecan;
-	//doc_playerLastClaim.innerHTML = a_playerLastClaim;
+	doc_playerBoost.innerHTML = a_playerBoost;
+	doc_playerTree.innerHTML = numberWithSpaces(a_playerTree);
+	doc_playerPecan.innerHTML = numberWithSpaces(a_playerPecan);
 	doc_playerEtherShare.innerHTML = a_playerEtherShare;
-	doc_playerPecanShare.innerHTML = a_playerPecanShare;
-	doc_rootPecanForOneEther.innerHTML = a_rootPecanForOneEther;
+	doc_playerPecanShare.innerHTML = numberWithSpaces(a_playerPecanShare);
+	doc_rootPecanForOneEther.innerHTML = numberWithSpaces(a_rootPecanForOneEther);
+	timeSincePlayerClaim();
 }
 
 function updateField(){
 	f_pecan = document.getElementById('fieldPecan').value;
 	f_root = document.getElementById('fieldRoot').value;
-}
-
-/* UTILITIES */
-
-//Truncates ETH value to 3 decimals
-function formatEthValue(ethstr){
-    return parseFloat(parseFloat(ethstr).toFixed(3));
-}
-
-//Truncates ETH value to 6 decimals
-function formatEthValue2(ethstr){
-	return parseFloat(parseFloat(ethstr).toFixed(6));
+	doc_tradeReward.innerHTML = a_tradeReward;
 }
 
 /* CALCULATIONS */
@@ -170,18 +266,49 @@ function computeLastRootPlant(){
 	return _plantString;		
 }
 
+function computeProgressBar(){
+	var _state = parseFloat(a_pecanGiven / a_pecanToWin).toFixed(2);
+	var _result = Math.floor(_state * 100) + '%';
+	doc_progressBar.style.width = _result;
+	doc_progressBar.innerHTML = _result;
+}
+
 function computePecanLeft(){
 	a_pecanLeft = parseFloat(a_pecanToWin - a_pecanGiven).toFixed(0);
 }
 
+function computeWonkWonk(){
+	ComputeWonkTrade(f_pecan, function(result) {
+		a_tradeReward = parseFloat(web3.fromWei(result, 'ether')).toFixed(8);
+	});
+}
+
 /* FAST LOCAL UPDATES */
 function fastupdateRootPecan(){
-	var _now = (new Date).getTime();
-	var _timeSinceLastMs = parseFloat(_now) - parseFloat(a_lastRootPlant * 1000);
-	var _boostFactor = parseFloat((_timeSinceLastMs * 0.005) + parseFloat(1000));
-	var _reward = _boostFactor / 0.0005 / 1000;
+	timeNow = (new Date).getTime();
+	////console.log(timeNow);
+	var _millisecondSinceLast = parseFloat(timeNow) - parseFloat(a_lastRootPlant * 1000);
+	var _boostFactor = parseFloat((_millisecondSinceLast * 0.01) + parseFloat(1000));
+	var _reward = 1000 * _boostFactor / 0.5;
 	a_rootPecanForOneEther = parseFloat(_reward).toFixed(0);
-	doc_rootPecanForOneEther.innerHTML = a_rootPecanForOneEther;
+	doc_rootPecanForOneEther.innerHTML = numberWithSpaces(a_rootPecanForOneEther);
+	var _playerReward = parseFloat(a_rootPecanForOneEther * f_root).toFixed(0);
+	doc_fieldPecanReward.innerHTML = numberWithSpaces(_playerReward);
+}
+
+function fastupdateEtherShare(){
+	var _millisecondSinceLast = parseFloat(timeNow) - parseFloat(a_playerLastClaim * 1000);
+	var _reward = 0.00000002 * a_playerTree * _millisecondSinceLast / 1000 / 86400;
+	a_playerEtherShare = parseFloat(_reward).toFixed(10);
+	doc_playerEtherShare.innerHTML = a_playerEtherShare;
+}
+		
+function fastupdatePecanShare(){
+	var _millisecondSinceLast = parseFloat(timeNow) - parseFloat(a_playerLastClaim * 1000);
+	var _boostFactor = Math.floor((_millisecondSinceLast / 3600000) + parseFloat(4));
+	var _reward = a_playerBoost * (_millisecondSinceLast / 1000) * a_playerTree * _boostFactor / 86400;
+	a_playerPecanShare = parseFloat(_reward).toFixed(0);
+	doc_playerPecanShare.innerHTML = numberWithSpaces(a_playerPecanShare);
 }
 		
 /* WEB3 CALLS */
@@ -195,7 +322,7 @@ function updateEthAccount(){
 function updateContractBalance(){
 	web3.eth.getBalance(contractAddress, function(error, result) {
 		if(!error) {
-			a_contractBalance = formatEthValue(web3.fromWei(result, 'ether')) 
+			a_contractBalance = formatEthValue(web3.fromWei(result, 'ether')); 
 		}
 	});
 }
@@ -259,7 +386,7 @@ function updateLastRootPlant(){
 //Current balance for player
 function updatePlayerBalance(){
 	GetMyBalance(function(result) {
-		a_playerBalance = formatEthValue2(web3.fromWei(result,'ether'));
+		a_playerBalance = formatEthValue(web3.fromWei(result,'ether'));
 	});
 }
 
@@ -267,6 +394,13 @@ function updatePlayerBalance(){
 function updatePlayerRound(){
 	GetMyRound(function(result) {
 		a_playerRound = result;
+	});
+}		
+
+//Current round for player
+function updatePlayerBoost(){
+	GetMyBoost(function(result) {
+		a_playerBoost= result;
 	});
 }		
 
@@ -283,6 +417,13 @@ function updatePlayerPecan(){
 		a_playerPecan = result;
 	});
 }		
+
+//Last claim for player
+function updatePlayerClaim(){
+	GetMyLastClaim(function(result) {
+		a_playerLastClaim = result;
+	});
+}	
 
 //Compute EtherShare
 function updatePlayerEtherShare(){
@@ -314,11 +455,31 @@ function webGivePecan(){
 	});
 }
 
+//Check first if player doesn't have too much unclaimed ETH
+function webCheckClaim(){
+	if(a_playerEtherShare > 0.0001){
+		claim_modal.style.display = "block";
+	} else {
+		webPlantRoot();
+	}
+}
+
 //Plant root
 function webPlantRoot(){
 	var weitospend = web3.toWei(f_root,'ether');
 	PlantRoot(weitospend, function(){
 	});
+}
+
+//Check first if it has been at least one hour since last player action
+function webCheckTime(){
+	var _now = Math.round((new Date()).getTime() / 1000);
+	var _timeSinceLast = parseFloat(_now - a_playerLastClaim);
+	if(_timeSinceLast < 3800){
+		grow_modal.style.display = "block";
+	} else {
+		webGrowTree();
+	}
 }
 
 //Grow tree
@@ -328,7 +489,7 @@ function webGrowTree(){
 }
 
 //Claim share
-function webClaimShare(){
+function webHarvestShare(){
 	ClaimShare(function(){
 	});
 }
@@ -347,249 +508,14 @@ function webPayThrone(){
 
 
 /* CONTRACT ABI */
-abiDefinition=[{"constant": false,"inputs": [],"name": "ClaimShare","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": false,"inputs": [{"name": "_pecanGift","type": "uint256"}],"name": "GivePecan","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": false,"inputs": [],"name": "GrowTree","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": false,"inputs": [],"name": "PayThrone","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": false,"name": "eth","type": "uint256"},{"indexed": false,"name": "treesize","type": "uint256"}],"name": "PlantedRoot","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": false,"name": "eth","type": "uint256"},{"indexed": false,"name": "pecan","type": "uint256"}],"name": "GavePecan","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": false,"name": "eth","type": "uint256"},{"indexed": false,"name": "pecan","type": "uint256"}],"name": "ClaimedShare","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": false,"name": "eth","type": "uint256"},{"indexed": false,"name": "pecan","type": "uint256"}],"name": "GrewTree","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": true,"name": "round","type": "uint256"}],"name": "JoinedRound","type": "event"},{"constant": false,"inputs": [],"name": "PlantRoot","outputs": [],"payable": true,"stateMutability": "payable","type": "function"},{"constant": false,"inputs": [],"name": "WithdrawBalance","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": true,"name": "round","type": "uint256"},{"indexed": false,"name": "eth","type": "uint256"}],"name": "WonRound","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": false,"name": "eth","type": "uint256"}],"name": "WithdrewBalance","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": false,"name": "eth","type": "uint256"}],"name": "PaidThrone","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": false,"name": "eth","type": "uint256"}],"name": "BoostedPot","type": "event"},{"payable": true,"stateMutability": "payable","type": "fallback"},{"inputs": [],"payable": false,"stateMutability": "nonpayable","type": "constructor"},{"constant": true,"inputs": [{"name": "adr","type": "address"}],"name": "ComputeEtherShare","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "adr","type": "address"}],"name": "ComputePecanShare","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "ComputePecanToWin","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "ComputePlantBoostFactor","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "_msgValue","type": "uint256"}],"name": "ComputePlantPecan","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "adr","type": "address"}],"name": "ComputeShareBoostFactor","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "_pecanGift","type": "uint256"}],"name": "ComputeWonkTrade","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "gameRound","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "GetMyBalance","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "GetMyRound","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "adr","type": "address"}],"name": "GetPecan","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "adr","type": "address"}],"name": "GetTree","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "jackPot","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "","type": "address"}],"name": "lastClaim","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "lastRootPlant","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "","type": "address"}],"name": "pecan","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "PECAN_MIN_WIN","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "PECAN_WIN_FACTOR","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "pecanGiven","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "pecanToWin","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "","type": "address"}],"name": "playerBalance","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "","type": "address"}],"name": "playerRound","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "REWARD_SIZE_ETH","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "SECONDS_IN_DAY","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "SECONDS_IN_HOUR","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "SNAILTHRONE","outputs": [{"name": "","type": "address"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "thronePot","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "TREE_SIZE_COST","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "treePot","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "","type": "address"}],"name": "treeSize","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "wonkPot","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"}]
 
-function ClaimShare(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.ClaimShare.getData();
-    var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('ClaimShare ',result);
-            callback(result)
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
+abiDefinition=[{"constant": true,"inputs": [],"name": "GetMyBalance","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "","type": "address"}],"name": "playerRound","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [],"name": "PlantRoot","outputs": [],"payable": true,"stateMutability": "payable","type": "function"},{"constant": true,"inputs": [{"name": "","type": "address"}],"name": "treeSize","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "adr","type": "address"}],"name": "GetPecan","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [{"name": "_pecanGift","type": "uint256"}],"name": "GivePecan","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [],"name": "pecanToWin","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "adr","type": "address"}],"name": "ComputeEtherShare","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "jackPot","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [],"name": "PayThrone","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [{"name": "","type": "address"}],"name": "playerBalance","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [],"name": "GrowTree","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [{"name": "","type": "address"}],"name": "lastClaim","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "ComputePecanToWin","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "adr","type": "address"}],"name": "ComputePecanShare","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "","type": "address"}],"name": "pecan","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "_pecanGift","type": "uint256"}],"name": "ComputeWonkTrade","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "GetMyLastClaim","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "GetMyBoost","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "treePot","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [],"name": "WithdrawBalance","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [],"name": "gameRound","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "","type": "address"}],"name": "boost","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "wonkPot","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "ComputePlantBoostFactor","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "thronePot","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "GetMyRound","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "adr","type": "address"}],"name": "GetTree","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "_msgValue","type": "uint256"}],"name": "ComputePlantPecan","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "pecanGiven","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "adr","type": "address"}],"name": "ComputeShareBoostFactor","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "lastRootPlant","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [],"name": "ClaimShare","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"inputs": [],"payable": false,"stateMutability": "nonpayable","type": "constructor"},{"payable": true,"stateMutability": "payable","type": "fallback"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": false,"name": "eth","type": "uint256"},{"indexed": false,"name": "pecan","type": "uint256"},{"indexed": false,"name": "treesize","type": "uint256"}],"name": "PlantedRoot","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": false,"name": "eth","type": "uint256"},{"indexed": false,"name": "pecan","type": "uint256"}],"name": "GavePecan","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": false,"name": "eth","type": "uint256"},{"indexed": false,"name": "pecan","type": "uint256"}],"name": "ClaimedShare","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": false,"name": "eth","type": "uint256"},{"indexed": false,"name": "pecan","type": "uint256"},{"indexed": false,"name": "boost","type": "uint256"}],"name": "GrewTree","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": true,"name": "round","type": "uint256"},{"indexed": false,"name": "eth","type": "uint256"}],"name": "WonRound","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": false,"name": "eth","type": "uint256"}],"name": "WithdrewBalance","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": false,"name": "eth","type": "uint256"}],"name": "PaidThrone","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "player","type": "address"},{"indexed": false,"name": "eth","type": "uint256"}],"name": "BoostedPot","type": "event"}]
 
-
-function GivePecan(_pecanGift,callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.GivePecan.getData(_pecanGift);
-    var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('GivePecan ',result);
-            callback(result)
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function GrowTree(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.GrowTree.getData();
-    var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('GrowTree ',result);
-            callback(result)
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function PayThrone(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.PayThrone.getData();
-    var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('PayThrone ',result);
-            callback(result)
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function PlantRoot(eth,callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.PlantRoot.getData();
-    var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData,value: eth},
-    function(error,result){
-        if(!error){
-            //console.log('PlantRoot ',result);
-            callback(result)
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function WithdrawBalance(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.WithdrawBalance.getData();
-    var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('WithdrawBalance ',result);
-            callback(result)
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function ComputeEtherShare(adr,callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.ComputeEtherShare.getData(adr);
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('ComputeEtherShare ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function ComputePecanShare(adr,callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.ComputePecanShare.getData(adr);
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('ComputePecanShare ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function ComputePecanToWin(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.ComputePecanToWin.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('ComputePecanToWin ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function ComputePlantBoostFactor(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.ComputePlantBoostFactor.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('ComputePlantBoostFactor ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function ComputePlantPecan(_msgValue,callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.ComputePlantPecan.getData(_msgValue);
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('ComputePlantPecan ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function ComputeShareBoostFactor(adr,callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.ComputeShareBoostFactor.getData(adr);
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('ComputeShareBoostFactor ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function ComputeWonkTrade(_pecanGift,callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.ComputeWonkTrade.getData(_pecanGift);
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('ComputeWonkTrade ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function gameRound(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.gameRound.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('gameRound ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
+var contractAbi = web3.eth.contract(abiDefinition);
+var myContract = contractAbi.at(contractAddress);
+	
 function GetMyBalance(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
+
     var outputData = myContract.GetMyBalance.getData();
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
@@ -604,213 +530,9 @@ function GetMyBalance(callback){
 }
 
 
-function GetMyRound(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.GetMyRound.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('GetMyRound ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function GetPecan(adr,callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.GetPecan.getData(adr);
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('GetPecan ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function GetTree(adr,callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.GetTree.getData(adr);
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('GetTree ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function jackPot(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.jackPot.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('jackPot ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function lastClaim(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.lastClaim.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('lastClaim ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function lastRootPlant(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.lastRootPlant.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('lastRootPlant ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function pecan(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.pecan.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('pecan ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function PECAN_MIN_WIN(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.PECAN_MIN_WIN.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('PECAN_MIN_WIN ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function PECAN_WIN_FACTOR(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.PECAN_WIN_FACTOR.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('PECAN_WIN_FACTOR ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function pecanGiven(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.pecanGiven.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('pecanGiven ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function pecanToWin(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.pecanToWin.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('pecanToWin ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function playerBalance(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.playerBalance.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('playerBalance ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
 function playerRound(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
+    
+    
     var outputData = myContract.playerRound.getData();
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
@@ -825,65 +547,14 @@ function playerRound(callback){
 }
 
 
-function REWARD_SIZE_ETH(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.REWARD_SIZE_ETH.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+function PlantRoot(eth,callback){
+    
+    
+    var outputData = myContract.PlantRoot.getData();
+    var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData,value: eth},
     function(error,result){
         if(!error){
-            //console.log('REWARD_SIZE_ETH ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function SECONDS_IN_DAY(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.SECONDS_IN_DAY.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('SECONDS_IN_DAY ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function SECONDS_IN_HOUR(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.SECONDS_IN_HOUR.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('SECONDS_IN_HOUR ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function SNAILTHRONE(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.SNAILTHRONE.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('SNAILTHRONE ',result);
+            //console.log('PlantRoot ',result);
             callback(result)
         }
         else{
@@ -893,60 +564,9 @@ function SNAILTHRONE(callback){
 }
 
 
-function thronePot(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.thronePot.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('thronePot ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function TREE_SIZE_COST(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.TREE_SIZE_COST.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('TREE_SIZE_COST ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
-function treePot(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
-    var outputData = myContract.treePot.getData();
-    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
-    function(error,result){
-        if(!error){
-            //console.log('treePot ',web3.toDecimal(result));
-            callback(web3.toDecimal(result))
-        }
-        else{
-            //console.log('transaction failed with ',error.message)
-        }
-    });
-}
-
-
 function treeSize(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
+    
+    
     var outputData = myContract.treeSize.getData();
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
@@ -961,9 +581,332 @@ function treeSize(callback){
 }
 
 
+function GetPecan(adr,callback){
+    
+    
+    var outputData = myContract.GetPecan.getData(adr);
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('GetPecan ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function GivePecan(_pecanGift,callback){
+    
+    
+    var outputData = myContract.GivePecan.getData(_pecanGift);
+    var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('GivePecan ',result);
+            callback(result)
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function pecanToWin(callback){
+    
+    
+    var outputData = myContract.pecanToWin.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('pecanToWin ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function ComputeEtherShare(adr,callback){
+    
+    
+    var outputData = myContract.ComputeEtherShare.getData(adr);
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('ComputeEtherShare ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function jackPot(callback){
+    
+    
+    var outputData = myContract.jackPot.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('jackPot ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function PayThrone(callback){
+    
+    
+    var outputData = myContract.PayThrone.getData();
+    var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('PayThrone ',result);
+            callback(result)
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function playerBalance(callback){
+    
+    
+    var outputData = myContract.playerBalance.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('playerBalance ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function GrowTree(callback){
+    
+    
+    var outputData = myContract.GrowTree.getData();
+    var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('GrowTree ',result);
+            callback(result)
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function lastClaim(callback){
+    
+    
+    var outputData = myContract.lastClaim.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('lastClaim ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function ComputePecanToWin(callback){
+    
+    
+    var outputData = myContract.ComputePecanToWin.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('ComputePecanToWin ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function ComputePecanShare(adr,callback){
+    
+    
+    var outputData = myContract.ComputePecanShare.getData(adr);
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('ComputePecanShare ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function pecan(callback){
+    
+    
+    var outputData = myContract.pecan.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('pecan ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function ComputeWonkTrade(_pecanGift,callback){
+    
+    
+    var outputData = myContract.ComputeWonkTrade.getData(_pecanGift);
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('ComputeWonkTrade ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function GetMyLastClaim(callback){
+    
+    
+    var outputData = myContract.GetMyLastClaim.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('GetMyLastClaim ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function GetMyBoost(callback){
+    
+    
+    var outputData = myContract.GetMyBoost.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('GetMyBoost ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function treePot(callback){
+    
+    
+    var outputData = myContract.treePot.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('treePot ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function WithdrawBalance(callback){
+    
+    
+    var outputData = myContract.WithdrawBalance.getData();
+    var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('WithdrawBalance ',result);
+            callback(result)
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function gameRound(callback){
+    
+    
+    var outputData = myContract.gameRound.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('gameRound ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function boost(callback){
+    
+    
+    var outputData = myContract.boost.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('boost ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
 function wonkPot(callback){
-    var contractAbi = web3.eth.contract(abiDefinition);
-    var myContract = contractAbi.at(contractAddress);
+    
+    
     var outputData = myContract.wonkPot.getData();
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
@@ -978,3 +921,276 @@ function wonkPot(callback){
 }
 
 
+function ComputePlantBoostFactor(callback){
+    
+    
+    var outputData = myContract.ComputePlantBoostFactor.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('ComputePlantBoostFactor ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function thronePot(callback){
+    
+    
+    var outputData = myContract.thronePot.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('thronePot ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function GetMyRound(callback){
+    
+    
+    var outputData = myContract.GetMyRound.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('GetMyRound ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function GetTree(adr,callback){
+    
+    
+    var outputData = myContract.GetTree.getData(adr);
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('GetTree ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function ComputePlantPecan(_msgValue,callback){
+    
+    
+    var outputData = myContract.ComputePlantPecan.getData(_msgValue);
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('ComputePlantPecan ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function pecanGiven(callback){
+    
+    
+    var outputData = myContract.pecanGiven.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('pecanGiven ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function ComputeShareBoostFactor(adr,callback){
+    
+    
+    var outputData = myContract.ComputeShareBoostFactor.getData(adr);
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('ComputeShareBoostFactor ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function lastRootPlant(callback){
+    
+    
+    var outputData = myContract.lastRootPlant.getData();
+    var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('lastRootPlant ',web3.toDecimal(result));
+            callback(web3.toDecimal(result))
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+function ClaimShare(callback){
+    
+    
+    var outputData = myContract.ClaimShare.getData();
+    var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
+    function(error,result){
+        if(!error){
+            //console.log('ClaimShare ',result);
+            callback(result)
+        }
+        else{
+            //console.log('transaction failed with ',error.message)
+        }
+    });
+}
+
+
+
+
+/* EVENT WATCH */
+
+//Store transaction hash for each event, and check before executing result, as web3 events fire twice
+var storetxhash = [];
+
+//Check equivalency
+function checkHash(txarray, txhash) {
+	var i = 0;
+	do {
+		if(txarray[i] == txhash) {
+			return 0;
+		}
+		i++;
+	}
+	while(i < txarray.length);
+	//Add new tx hash
+	txarray.push(txhash);
+	//Remove first tx hash if there's more than 16 hashes saved
+	if(txarray.length > 16) {
+		txarray.shift();
+	}
+}
+
+/* EVENTS */
+
+var logboxscroll = document.getElementById('logboxscroll');
+var eventlogdoc = document.getElementById("eventlog");
+
+var plantedrootEvent = myContract.PlantedRoot();
+
+plantedrootEvent.watch(function(error, result){
+    if(!error){
+		//////////console.log(result);
+		if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH. Their tree reaches " + result.args.treesize + " in size.";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		}
+	}
+});
+
+var claimedshareEvent = myContract.ClaimedShare();
+
+claimedshareEvent.watch(function(error, result){
+    if(!error){
+		//////////console.log(result);
+		if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " claimed their share worth " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH and got " + result.args.pecan + " Pecans.";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		}
+	}
+});
+
+var grewtreeEvent = myContract.GrewTree();
+
+grewtreeEvent.watch(function(error, result){
+    if(!error){
+		//////////console.log(result);
+		if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " grew their Tree and won " + result.args.pecan + " Pecans. Their boost is " + result.args.boost + "x.";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		}
+	}
+});
+
+var wonroundEvent = myContract.WonRound();
+
+wonroundEvent.watch(function(error, result){
+    if(!error){
+		//////////console.log(result);
+		//if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " WINS ROUND " + result.args.round + " AND EARNS " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH!";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		//}
+	}
+});
+
+var withdrewbalanceEvent = myContract.WithdrewBalance();
+
+withdrewbalanceEvent.watch(function(error, result){
+    if(!error){
+		//////////console.log(result);
+		if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " withdrew " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH from their balance.";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		}
+	}
+});
+
+var paidthroneEvent = myContract.PaidThrone();
+
+paidthroneEvent.watch(function(error, result){
+    if(!error){
+		//////////console.log(result);
+		if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " paid tribute to the SnailThrone! " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH have been sent.";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		}
+	}
+});
+
+var boostedpotEvent = myContract.BoostedPot();
+
+boostedpotEvent.watch(function(error, result){
+    if(!error){
+		//////////console.log(result);
+		if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " makes a generous " + formatEthValue2(web3.fromWei(result.args.eth,'ether')) + " ETH donation to the JackPot.";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		}
+	}
+});
