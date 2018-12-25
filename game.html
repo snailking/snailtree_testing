@@ -107,6 +107,21 @@
 				</div>
 			</div>
 		</div><br><br>
+		<!-- MODAL. IN CASE PLAYER TRIES TO TRADE TOO MANY PECANS -->
+		<div id="claimmodal" class="modal">
+			<div class="jumbotron modal-content" align="center">
+				<h3 class="black-shadow">NOT ENOUGH PECANS</h3><br>
+				<div class="container-beige">
+					<h5>Wonkers doesn't take credit! You cannot trade more pecans than you own.</h5>
+					<h5>If you want to give all your available Pecans, confirm below.</h5>
+				</div>
+				<div class="container" align="center">
+					<button type="button" class="btn btn-success" onclick="CloseModal()">Cancel</button>
+					<button type="button" class="btn btn-success" onclick="webGivePecan()">Give all Pecans</button>
+					<h6>You will receive: <span id="tradereward2">?</span> ETH</h6>
+				</div>
+			</div>
+		</div>
 		<!-- MODAL. IN CASE PLAYER HASN'T CLAIMED BEFORE BUY -->
 		<div id="claimmodal" class="modal">
 			<div class="jumbotron modal-content" align="center">

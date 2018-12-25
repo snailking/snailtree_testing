@@ -32,6 +32,7 @@ var claim_modal = document.getElementById("claimmodal");
 var grow_modal = document.getElementById("growmodal");
 var root_modal = document.getElementById("rootmodal");
 var toolow_modal = document.getElementById("toolowmodal");
+var pecan_modal = document.getElementById("pecanmodal");
 
 // Close modal on game info
 function CloseModal() {
@@ -39,15 +40,17 @@ function CloseModal() {
 	grow_modal.style.display = "none";
 	root_modal.style.display = "none";
 	toolow_modal.style.display = "none";
+	pecan_modal.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-    if (event.target == claim_modal || event.target == grow_modal || event.target == root_modal || event.target == toolow_modal) {
+    if (event.target == claim_modal || event.target == grow_modal || event.target == root_modal || event.target == toolow_modal || event.target == pecan_modal) {
         claim_modal.style.display = "none";
 		grow_modal.style.display = "none";
 		root_modal.style.display = "none";
 		toolow_modal.style.display = "none";
+		pecan_modal.style.display = "none";
     }
 }
 
@@ -104,6 +107,7 @@ var doc_playerLastClaim = document.getElementById('playerlastclaim');
 var doc_fieldPecan = document.getElementById('fieldPecan');
 var doc_fieldRoot = document.getElementById('fieldRoot');
 var doc_tradeReward = document.getElementById('tradereward');
+var doc_tradeReward2 = document.getElementById('tradereward2');
 var doc_progressBar = document.getElementById('progressbarpecan');
 var doc_fieldPecanReward = document.getElementById('fieldpecanreward');
 var doc_boostReady = document.getElementById('boostready');
@@ -249,6 +253,7 @@ function updateField(){
 	f_pecan = document.getElementById('fieldPecan').value;
 	f_root = document.getElementById('fieldRoot').value;
 	doc_tradeReward.innerHTML = a_tradeReward;
+	doc_tradeReward2.innerHTML = a_tradeReward;
 }
 
 /* CALCULATIONS */
@@ -454,6 +459,17 @@ function updateRootPecan(){
 }
 
 /* WEB3 TRANSACTIONS */
+
+//Check number of Pecans isn't above player max
+function webCheckPecan(){
+	if(f_pecan > a_playerPecan){
+		f_pecan = a_playerPecan;
+		document.getElementById('fieldPecan').value = a_playerPecan;
+		pecan_modal.style.display = "block";
+	} else {
+		webGivePecan();
+	}
+}
 
 //Give pecan
 function webGivePecan(){
