@@ -28,20 +28,26 @@ window.addEventListener("load", function() {
 /* MODAL */
 
 // Get the modals
+var root_modal = document.getElementById("rootmodal");
 var claim_modal = document.getElementById("claimmodal");
 var grow_modal = document.getElementById("growmodal");
+var toolow_modal = document.getElementById("toolowmodal");
 
 // Close modal on game info
 function CloseModal() {
 	claim_modal.style.display = "none";
 	grow_modal.style.display = "none";
+	root_modal.style.display = "none";
+	toolow_modal.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-    if (event.target == claim_modal || event.target == grow_modal) {
+    if (event.target == claim_modal || event.target == grow_modal || event.target == root_modal || event.target == toolow_modal) {
         claim_modal.style.display = "none";
 		grow_modal.style.display = "none";
+		root_modal.style.display = "none";
+		toolow_modal.style.display = "none";
     }
 }
 
@@ -455,10 +461,22 @@ function webGivePecan(){
 	});
 }
 
+//On other actions, make sure the player has already planted a root 
+function webCheckRoot(_func){
+	if(a_playerTree == 0){
+		plant_modal.style.display = "block";
+	} else {
+		_func();
+	}
+}
+
 //Check first if player doesn't have too much unclaimed ETH
+//Also make sure player is spending at least 0.001 ETH
 function webCheckClaim(){
 	if(a_playerEtherShare > 0.0001){
 		claim_modal.style.display = "block";
+	} else if(f_root < 0.001) {
+		toolow_modal.style.display = "block";
 	} else {
 		webPlantRoot();
 	}
@@ -582,8 +600,6 @@ function treeSize(callback){
 
 
 function GetPecan(adr,callback){
-    
-    
     var outputData = myContract.GetPecan.getData(adr);
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){
@@ -598,9 +614,7 @@ function GetPecan(adr,callback){
 }
 
 
-function GivePecan(_pecanGift,callback){
-    
-    
+function GivePecan(_pecanGift,callback){   
     var outputData = myContract.GivePecan.getData(_pecanGift);
     var endstr=web3.eth.sendTransaction({to:contractAddress, from:null, data: outputData},
     function(error,result){
@@ -615,9 +629,7 @@ function GivePecan(_pecanGift,callback){
 }
 
 
-function pecanToWin(callback){
-    
-    
+function pecanToWin(callback){   
     var outputData = myContract.pecanToWin.getData();
     var endstr=web3.eth.call({to:contractAddress, from:null, data: outputData},
     function(error,result){

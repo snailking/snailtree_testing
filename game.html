@@ -49,7 +49,7 @@
 		<!-- WONKERS WINDOW. PYRAMID MADE OUT OF PECANS. WONKERS ON TOP CHOMPING ON NUTS. GIVE BUTTON. VERTICAL PROGRESS BAR ON SIDE. -->
 		<div class="container wonkers-container" align="center">
 			<img src="img/squirrel_crazy.png"><br><br>
-			<button class="btn btn-lg btn-success" onclick="webGivePecan()">GIVE PECAN</button><br><br>
+			<button class="btn btn-lg btn-success" onclick="webCheckRoot(webGivePecan)">GIVE PECAN</button><br><br>
 			<div class="row">
 				<div class="col-sm">
 					<h4 class="black-shadow">You have <span id="playerpecan">?</span> Pecans</h4>
@@ -93,14 +93,14 @@
 				</div>
 				<div class="col-sm" align="center">
 					<div class="container-beige">
-						<button class="btn btn-lg btn-success" onclick="webCheckTime()">GROW TREE</button>
+						<button class="btn btn-lg btn-success" onclick="webCheckRoot(webCheckTime)">GROW TREE</button>
 					</div>
 					<h5 class="black-shadow">Use Ether Share to grow Size</h5>
 					<span id="boostready"><h5 class="black-shadow">Adds Boost once per hour</h5></span>
 				</div>
 				<div class="col-sm" align="center">
 					<div class="container-beige">
-						<button class="btn btn-lg btn-success" onclick="webHarvestShare()">HARVEST SHARE</button>
+						<button class="btn btn-lg btn-success" onclick="webCheckRoot(webHarvestShare)">HARVEST SHARE</button>
 					</div>
 					<h5 class="black-shadow">Get your ETH and Pecan rewards</p>
 					<h5 class="black-shadow">Claim before Planting any new Root!</p>
@@ -110,7 +110,7 @@
 		<!-- MODAL. IN CASE PLAYER HASN'T CLAIMED BEFORE BUY -->
 		<div id="claimmodal" class="modal">
 			<div class="jumbotron modal-content" align="center">
-				<h3 class="black-shadow">You have unclaimed ETH and Pecans.</h3><br>
+				<h3 class="black-shadow">UNCLAIMED ETHER AND PECANS</h3><br>
 				<div class="container-beige">
 					<h5>Planting another Root will reset your accumulated ETH and Pecans to 0!</h5>
 					<h5>It's recommended you Grow your Tree or Claim your Share before Planting a new Root.</h5>
@@ -124,13 +124,40 @@
 		<!-- MODAL. FOR GROWTH BEFORE 1 HOUR -->
 		<div id="growmodal" class="modal">
 			<div class="jumbotron modal-content" align="center">
-				<h3 class="black-shadow">It has been less than 1 Hour since your last Tree action.</h3><br>
+				<h3 class="black-shadow">BOOST NOT AVAILABLE</h3><br>
 				<div class="container-beige">
+					<h5>It has been less than 1 Hour since your last Tree action.</h5>
 					<h5>If you Grow your Tree now, you will not get an extra Boost!</h5>
 				</div>
 				<div class="container" align="center">
 					<button type="button" class="btn btn-success" onclick="CloseModal()">Cancel</button>
 					<button type="button" class="btn btn-success" onclick="webGrowTree()">Grow Tree</button>
+				</div>
+			</div>
+		</div>
+		<!-- MODAL. IN CASE PLAYER TRIES ANYTHING BEFORE PLANTING A ROOT -->
+		<div id="rootmodal" class="modal">
+			<div class="jumbotron modal-content" align="center">
+				<h3 class="black-shadow">NO TREE</h3><br>
+				<div class="container-beige">
+					<h5>Your Tree cannot grow without roots. Plant a Root first to play SnailTree</h5>
+					<h5>Spend at least 0.001 ETH to start growing your Tree!</h5>
+				</div>
+				<div class="container" align="center">
+					<button type="button" class="btn btn-success" onclick="CloseModal()">Got it!</button>
+				</div>
+			</div>
+		</div>
+		<!-- MODAL. IN CASE PLAYER PLANTS A ROOT WITH LESS THAN 0.001 ETH -->
+		<div id="toolowmodal" class="modal">
+			<div class="jumbotron modal-content" align="center">
+				<h3 class="black-shadow">NOT ENOUGH ETHER</h3><br>
+				<div class="container-beige">
+					<h5>You must use at least 0.001 ETH to Plant a Root.</h5>
+					<h5>After Planting a Root, you will be able to Grow your Tree with less than 0.001 ETH.</h5>
+				</div>
+				<div class="container" align="center">
+					<button type="button" class="btn btn-success" onclick="CloseModal()">Got it!</button>
 				</div>
 			</div>
 		</div>
