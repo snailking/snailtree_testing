@@ -1189,7 +1189,7 @@ claimedshareEvent.watch(function(error, result){
 
 myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
-		//////////console.log(result);
+		console.log(result);
 		if(checkHash(storetxhash, result.transactionHash) != 0) {
 			date24();
 			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " grew their Tree and won " + result.args.pecan + " Pecans. Their boost is " + result.args.boost + "x.";
