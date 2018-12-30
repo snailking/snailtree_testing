@@ -217,7 +217,6 @@ function initUpdate(){
 	slowUpdate();
 	fastUpdate();
 	checkLaunch();
-	writeGrewtreeLog();
 }	
 
 function slowUpdate(){
@@ -1188,27 +1187,21 @@ claimedshareEvent.watch(function(error, result){
 	}
 });
 
-var grewtreeLog;
 
-var myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
+const myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		console.log(result);
-		grewtreeLog = result;
-	}
-	else{
-		console.log("problem!");
-	}
-});
-
-function writeGrewtreeLog(){
-	for(i = 0; i < grewtreeLog.length; i++){
 		if(checkHash(storetxhash, grewtreeLog[i].transactionHash) != 0) {
 			date24();
 			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(grewtreeLog[i].args.player) + " grew their Tree and won " + grewtreeLog[i].args.pecan + " Pecans. Their boost is " + grewtreeLog[i].args.boost + "x.";
 			logboxscroll.scrollTop = logboxscroll.scrollHeight;
 		}
 	}
-}
+	else{
+		console.log("problem!");
+	}
+});
+
 	
 /*
 var grewtreeEvent = myContract.GrewTree();
