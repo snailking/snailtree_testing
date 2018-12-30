@@ -1200,7 +1200,7 @@ grewtreeEvent.watch(function(error, result){
 	}
 });
 
-myContract.GrewTree({}, { fromBlock: (await web3.eth.getBlockNumber()) - 12000, toBlock: 'latest' }).get(function(error, result){
+myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		//console.log(result);
 		var i = 0;
