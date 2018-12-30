@@ -63,7 +63,7 @@ var ranLog = false;
 
 function checkBlock(){
 	web3.eth.getBlockNumber(function (error, result){
-		twoDaysBlock = result - 6000;
+		twoDaysBlock = result - 12000;
 	});
 }
 
