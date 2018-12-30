@@ -1191,8 +1191,8 @@ myContract.PlantedRoot({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(fu
 		var i = 0;
 		for(i = 0; i < result.length; i++){
 			if(checkHash(storetxhash, result[i].transactionHash) != 0) {
-				dateLog(result[i].blockNumber);
-				eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + result[i].args.treesize + " in size.";
+				//dateLog(result[i].blockNumber);
+				eventlogdoc.innerHTML += "<br>[" + result[i].blockNumber + "] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + result[i].args.treesize + " in size.";
 				logboxscroll.scrollTop = logboxscroll.scrollHeight;
 			}
 		}
@@ -1342,8 +1342,8 @@ boostedpotEvent.watch(function(error, result){
 		}
 	}
 });
-
+/*
 const filter = { fromBlock: launchBlock, toBlock: 'latest'}; // filter for your address
 const events = myContract.allEvents(filter); // get all events
 console.log(events);
-
+*/
