@@ -1175,13 +1175,18 @@ var eventlogdoc = document.getElementById("eventlog");
 myContract.allEvents({ fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		console.log(result);
-		/*var i = 0;
+		var i = 0;
 		for(i = 0; i < result.length; i++){
 			if(checkHash(storetxhash, result[i].transactionHash) != 0) {
-				eventlogdoc.innerHTML += "<br>[GAVE] " + formatEthAdr(result[i].args.player) + " gave " + result[i].args.pecan + " Pecans to Wonkers, and got " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH in exchange!";
-				logboxscroll.scrollTop = logboxscroll.scrollHeight;
+				if(result[i].event == "GavePecan"){
+					eventlogdoc.innerHTML += "<br>[GAVE] " + formatEthAdr(result[i].args.player) + " gave " + result[i].args.pecan + " Pecans to Wonkers, and got " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH in exchange!";
+					logboxscroll.scrollTop = logboxscroll.scrollHeight;
+				} else if(result[i].event == "PlantedRoot"){
+					eventlogdoc.innerHTML += "<br>[" + result[i].blockNumber + "] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + result[i].args.treesize + " in size.";
+					logboxscroll.scrollTop = logboxscroll.scrollHeight;
+				}
 			}
-		}*/
+		}
 	}
 	else{
 		console.log("problem!");
@@ -1200,7 +1205,7 @@ plantedrootEvent.watch(function(error, result){
 		}
 	}
 });
-
+/*
 myContract.PlantedRoot({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		//console.log(result);
@@ -1217,7 +1222,7 @@ myContract.PlantedRoot({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(fu
 		console.log("problem!");
 	}
 });
-
+*/
 var claimedshareEvent = myContract.ClaimedShare();
 
 claimedshareEvent.watch(function(error, result){
@@ -1230,7 +1235,7 @@ claimedshareEvent.watch(function(error, result){
 		}
 	}
 });
-
+/*
 myContract.ClaimedShare({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		//console.log(result);
@@ -1246,7 +1251,7 @@ myContract.ClaimedShare({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(f
 		console.log("problem!");
 	}
 });
-
+*/
 var grewtreeEvent = myContract.GrewTree();
 
 grewtreeEvent.watch(function(error, result){
@@ -1259,7 +1264,7 @@ grewtreeEvent.watch(function(error, result){
 		}
 	}
 });
-
+/*
 myContract.GrewTree({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		//console.log(result);
@@ -1275,7 +1280,7 @@ myContract.GrewTree({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(funct
 		console.log("problem!");
 	}
 });
-
+*/
 var wonroundEvent = myContract.WonRound();
 
 wonroundEvent.watch(function(error, result){
@@ -1303,7 +1308,7 @@ gavepecanEvent.watch(function(error, result){
 		}
 	}
 });
-
+/*
 myContract.GavePecan({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		//console.log(result);
@@ -1319,7 +1324,7 @@ myContract.GavePecan({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(func
 		console.log("problem!");
 	}
 });
-
+*/
 var withdrewbalanceEvent = myContract.WithdrewBalance();
 
 withdrewbalanceEvent.watch(function(error, result){
