@@ -1179,10 +1179,16 @@ myContract.allEvents({ fromBlock: launchBlock, toBlock: 'latest' }).get(function
 		for(i = 0; i < result.length; i++){
 			if(checkHash(storetxhash, result[i].transactionHash) != 0) {
 				if(result[i].event == "GavePecan"){
-					eventlogdoc.innerHTML += "<br>[GAVE] " + formatEthAdr(result[i].args.player) + " gave " + result[i].args.pecan + " Pecans to Wonkers, and got " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH in exchange!";
+					eventlogdoc.innerHTML += "<br>[" + result[i].blockNumber + "] " + formatEthAdr(result[i].args.player) + " gave " + result[i].args.pecan + " Pecans to Wonkers, and got " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH in exchange!";
 					logboxscroll.scrollTop = logboxscroll.scrollHeight;
 				} else if(result[i].event == "PlantedRoot"){
 					eventlogdoc.innerHTML += "<br>[" + result[i].blockNumber + "] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + result[i].args.treesize + " in size.";
+					logboxscroll.scrollTop = logboxscroll.scrollHeight;
+				} else if(result[i].event == "ClaimedShare"){
+					eventlogdoc.innerHTML += "<br>[ " + result[i].blockNumber + "] " + formatEthAdr(result[i].args.player) + " claimed their share worth " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH and got " + result[i].args.pecan + " Pecans.";
+					logboxscroll.scrollTop = logboxscroll.scrollHeight;
+				} else if(result[i].event == "GrewTree"){
+					eventlogdoc.innerHTML += "<br>[ " + result[i].blockNumber + "] " + formatEthAdr(result[i].args.player) + " grew their Tree and won " + result[i].args.pecan + " Pecans. Their boost is " + result[i].args.boost + "x.";
 					logboxscroll.scrollTop = logboxscroll.scrollHeight;
 				}
 			}
