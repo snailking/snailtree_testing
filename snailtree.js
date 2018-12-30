@@ -1190,7 +1190,7 @@ claimedshareEvent.watch(function(error, result){
 
 var grewtreeLog;
 
-const myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
+var myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		console.log(result);
 		grewtreeLog = result;
