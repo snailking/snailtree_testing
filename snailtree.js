@@ -59,9 +59,9 @@ window.onclick = function(event) {
 /* VARIABLES */
 
 var timeNow;
-var timeLaunch = 1546099321;
+var timeLaunch = 1546099245;
 var launchBlock = 6974738;
-var dateBlock = new Date("December 29, 2018 16:00:45");
+//var dateBlock = new Date("December 29, 2018 16:00:45");
 
 var a_contractBalance;
 var a_gameRound;
@@ -151,7 +151,7 @@ function date24() {
 
 //Get timestamp for log
 function dateLog(_blockNumber) {
-	d = new Date(dateBlock + (_blockNumber * 15 * 1000));
+	d = new Date(timeLaunch + (_blockNumber * 15 * 1000));
 	console.log(d);
 	datetext = d.toTimeString();
 	datetext = datetext.split(' ')[0];
