@@ -147,11 +147,23 @@ function date24() {
 	datetext = datetext.split(' ')[0];
 }
 
+//Conversion of blockNumber to date for past logs
 function dateLog(_blockNum) {
-	d = web3.eth.getBlock(_blockNum).timestamp;
+	var d;
+	web3.eth.getBlock(_blockNum).timestamp( function(result) {
+		d = result;
+	});
 	datetext = d.toTimeString();
 	datetext = datetext.split(' ')[0];
 }
+
+//Current pecans for player
+function updatePlayerPecan(){
+	GetPecan(m_account, function(result) {
+		a_playerPecan = result;
+	});
+}		
+
 
 //Unique check for prelaunch
 function checkLaunch(){
