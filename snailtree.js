@@ -60,6 +60,7 @@ window.onclick = function(event) {
 
 var timeNow;
 var timeLaunch = 1546099321;
+var launchBlock = 6912345;
 
 var a_contractBalance;
 var a_gameRound;
@@ -150,7 +151,10 @@ function date24() {
 //Get timestamp for log
 function dateLog(_blockNumber) {
 	web3.eth.getBlock(_blockNumber, function(error, result){
-		return result.timestamp;
+		d = result.timestamp;
+		console.log(d);
+		datetext = d.toTimeString();
+		datetext = datetext.split(' ')[0];
 	});
 }
 
@@ -1181,14 +1185,14 @@ plantedrootEvent.watch(function(error, result){
 	}
 });
 
-myContract.PlantedRoot({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
+myContract.PlantedRoot({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		console.log(result);
 		var i = 0;
 		for(i = 0; i < result.length; i++){
 			if(checkHash(storetxhash, result[i].transactionHash) != 0) {
 				dateLog(result[i].blockNumber);
-				eventlogdoc.innerHTML += "<br>[PLANT] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + result[i].args.treesize + " in size.";
+				eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + result[i].args.treesize + " in size.";
 				logboxscroll.scrollTop = logboxscroll.scrollHeight;
 			}
 		}
@@ -1211,7 +1215,7 @@ claimedshareEvent.watch(function(error, result){
 	}
 });
 
-myContract.ClaimedShare({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
+myContract.ClaimedShare({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		//console.log(result);
 		var i = 0;
@@ -1240,7 +1244,7 @@ grewtreeEvent.watch(function(error, result){
 	}
 });
 
-myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
+myContract.GrewTree({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		//console.log(result);
 		var i = 0;
@@ -1284,7 +1288,7 @@ gavepecanEvent.watch(function(error, result){
 	}
 });
 
-myContract.GavePecan({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
+myContract.GavePecan({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		//console.log(result);
 		var i = 0;
