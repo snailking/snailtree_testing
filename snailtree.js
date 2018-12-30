@@ -151,7 +151,7 @@ function date24() {
 function checkLaunch(){
 	//var blocktime = Math.round((new Date()).getTime() / 1000); //current blocktime should be Unix timestamp
 	//if(blocktime < timeLaunch){
-		prelaunch_modal.style.display = "block";
+		prelaunch_modal.style.display = "none";
 	//}
 }
 
