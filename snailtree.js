@@ -1172,6 +1172,22 @@ function checkHash(txarray, txhash) {
 var logboxscroll = document.getElementById('logboxscroll');
 var eventlogdoc = document.getElementById("eventlog");
 
+myContract.allEvents({ fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
+	if(!error){
+		console.log(result);
+		/*var i = 0;
+		for(i = 0; i < result.length; i++){
+			if(checkHash(storetxhash, result[i].transactionHash) != 0) {
+				eventlogdoc.innerHTML += "<br>[GAVE] " + formatEthAdr(result[i].args.player) + " gave " + result[i].args.pecan + " Pecans to Wonkers, and got " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH in exchange!";
+				logboxscroll.scrollTop = logboxscroll.scrollHeight;
+			}
+		}*/
+	}
+	else{
+		console.log("problem!");
+	}
+});
+
 var plantedrootEvent = myContract.PlantedRoot();
 
 plantedrootEvent.watch(function(error, result){
@@ -1187,7 +1203,7 @@ plantedrootEvent.watch(function(error, result){
 
 myContract.PlantedRoot({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
-		console.log(result);
+		//console.log(result);
 		var i = 0;
 		for(i = 0; i < result.length; i++){
 			if(checkHash(storetxhash, result[i].transactionHash) != 0) {
