@@ -1187,7 +1187,7 @@ claimedshareEvent.watch(function(error, result){
 	}
 });
 
-const myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
+var myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		console.log(result);
 		for(i = 0; i < result.length; i++){
