@@ -147,6 +147,13 @@ function date24() {
 	datetext = datetext.split(' ')[0];
 }	
 
+//Get timestamp for log
+function dateLog(_blockNumber) {
+	web3.eth.getBlock(_blockNumber, function(error, result){
+		return result.timestamp;
+	});
+}
+
 //Unique check for prelaunch
 function checkLaunch(){
 	//var blocktime = Math.round((new Date()).getTime() / 1000); //current blocktime should be Unix timestamp
@@ -1176,10 +1183,11 @@ plantedrootEvent.watch(function(error, result){
 
 myContract.PlantedRoot({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
-		//console.log(result);
+		console.log(result);
 		var i = 0;
 		for(i = 0; i < result.length; i++){
 			if(checkHash(storetxhash, result[i].transactionHash) != 0) {
+				dateLog(result[i].blockNumber);
 				eventlogdoc.innerHTML += "<br>[PLANT] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + result[i].args.treesize + " in size.";
 				logboxscroll.scrollTop = logboxscroll.scrollHeight;
 			}
