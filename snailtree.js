@@ -24,6 +24,16 @@ window.addEventListener("load", function() {
     }
 });
 
+var twoDaysBlock;
+
+function checkBlock(){
+	web3.eth.getBlockNumber(function (error, result){
+		twoDaysBlock = result - 6000;
+	});
+}
+
+checkBlock();
+
 /* MODAL */
 
 // Get the modals
@@ -1171,7 +1181,7 @@ function checkHash(txarray, txhash) {
 var logboxscroll = document.getElementById('logboxscroll');
 var eventlogdoc = document.getElementById("eventlog");
 
-myContract.allEvents({ fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
+myContract.allEvents({ fromBlock: twoDaysBlock, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		console.log(result);
 		var i = 0;
