@@ -58,6 +58,9 @@ window.onclick = function(event) {
 
 /* PAST EVENT LOG */
 
+var timeLaunch = 1546099245;
+var launchBlock = 6974738;
+
 var twoDaysBlock = 0;
 var ranLog = false;
 
@@ -72,8 +75,6 @@ checkBlock();
 /* VARIABLES */
 
 var timeNow;
-var timeLaunch = 1546099245;
-var launchBlock = 6974738;
 
 var a_contractBalance;
 var a_gameRound;
@@ -1179,18 +1180,15 @@ function runLog(){
 					if(checkHash(storetxhash, result[i].transactionHash) != 0) {
 						dateLog(result[i].blockNumber);
 						if(result[i].event == "GavePecan"){
-							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " gave " + result[i].args.pecan + " Pecans to Wonkers, and got " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH in exchange!";
-							logboxscroll.scrollTop = logboxscroll.scrollHeight;
+							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " gave " + result[i].args.pecan + " Pecans to Wonkers, and got " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH in exchange!";							
 						} else if(result[i].event == "PlantedRoot"){
 							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + result[i].args.treesize + " in size.";
-							logboxscroll.scrollTop = logboxscroll.scrollHeight;
 						} else if(result[i].event == "ClaimedShare"){
 							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " claimed their share worth " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH and got " + result[i].args.pecan + " Pecans.";
-							logboxscroll.scrollTop = logboxscroll.scrollHeight;
 						} else if(result[i].event == "GrewTree"){
 							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " grew their Tree and won " + result[i].args.pecan + " Pecans. Their boost is " + result[i].args.boost + "x.";
-							logboxscroll.scrollTop = logboxscroll.scrollHeight;
 						}
+					logboxscroll.scrollTop = logboxscroll.scrollHeight;
 					}
 				}
 			}
