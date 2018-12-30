@@ -1180,7 +1180,7 @@ myContract.PlantedRoot({}, { fromBlock: 0, toBlock: 'latest' }).get(function(err
 		var i = 0;
 		for(i = 0; i < result.length; i++){
 			if(checkHash(storetxhash, result[i].transactionHash) != 0) {
-				eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + result[i].args.treesize + " in size.";
+				eventlogdoc.innerHTML += "<br>[PLANT] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + result[i].args.treesize + " in size.";
 				logboxscroll.scrollTop = logboxscroll.scrollHeight;
 			}
 		}
@@ -1209,7 +1209,7 @@ myContract.ClaimedShare({}, { fromBlock: 0, toBlock: 'latest' }).get(function(er
 		var i = 0;
 		for(i = 0; i < result.length; i++){
 			if(checkHash(storetxhash, result[i].transactionHash) != 0) {
-				eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result[i].args.player) + " claimed their share worth " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH and got " + result[i].args.pecan + " Pecans.";
+				eventlogdoc.innerHTML += "<br>[CLAIM] " + formatEthAdr(result[i].args.player) + " claimed their share worth " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH and got " + result[i].args.pecan + " Pecans.";
 				logboxscroll.scrollTop = logboxscroll.scrollHeight;
 			}
 		}
@@ -1238,7 +1238,7 @@ myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error,
 		var i = 0;
 		for(i = 0; i < result.length; i++){
 			if(checkHash(storetxhash, result[i].transactionHash) != 0) {
-				eventlogdoc.innerHTML += "<br>[LOG] " + formatEthAdr(result[i].args.player) + " grew their Tree and won " + result[i].args.pecan + " Pecans. Their boost is " + result[i].args.boost + "x.";
+				eventlogdoc.innerHTML += "<br>[GREW] " + formatEthAdr(result[i].args.player) + " grew their Tree and won " + result[i].args.pecan + " Pecans. Their boost is " + result[i].args.boost + "x.";
 				logboxscroll.scrollTop = logboxscroll.scrollHeight;
 			}
 		}
@@ -1282,7 +1282,7 @@ myContract.GavePecan({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error
 		var i = 0;
 		for(i = 0; i < result.length; i++){
 			if(checkHash(storetxhash, result[i].transactionHash) != 0) {
-				eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result[i].args.player) + " gave " + result[i].args.pecan + " Pecans to Wonkers, and got " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH in exchange!";
+				eventlogdoc.innerHTML += "<br>[GAVE] " + formatEthAdr(result[i].args.player) + " gave " + result[i].args.pecan + " Pecans to Wonkers, and got " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH in exchange!";
 				logboxscroll.scrollTop = logboxscroll.scrollHeight;
 			}
 		}
