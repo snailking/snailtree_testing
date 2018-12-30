@@ -1277,8 +1277,3 @@ boostedpotEvent.watch(function(error, result){
 	}
 });
 
-
-const events= await MyContract.getPastEvents("EventName", {
-  fromBlock: (await web3.eth.getBlockNumber()) - 12343,
-  toBlock: "latest"
-});
