@@ -1187,6 +1187,18 @@ claimedshareEvent.watch(function(error, result){
 	}
 });
 
+myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
+	if(!error){
+		//////////console.log(result);
+		if(checkHash(storetxhash, result.transactionHash) != 0) {
+			date24();
+			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " grew their Tree and won " + result.args.pecan + " Pecans. Their boost is " + result.args.boost + "x.";
+			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		}
+	}
+});
+
+/*
 var grewtreeEvent = myContract.GrewTree();
 
 grewtreeEvent.watch(function(error, result){
@@ -1199,7 +1211,7 @@ grewtreeEvent.watch(function(error, result){
 		}
 	}
 });
-
+*/
 var wonroundEvent = myContract.WonRound();
 
 wonroundEvent.watch(function(error, result){
@@ -1263,4 +1275,10 @@ boostedpotEvent.watch(function(error, result){
 			logboxscroll.scrollTop = logboxscroll.scrollHeight;
 		}
 	}
+});
+
+
+const events= await MyContract.getPastEvents("EventName", {
+  fromBlock: (await web3.eth.getBlockNumber()) - 12343,
+  toBlock: "latest"
 });
