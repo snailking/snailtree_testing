@@ -1343,3 +1343,7 @@ boostedpotEvent.watch(function(error, result){
 	}
 });
 
+const filter = { fromBlock: launchBlock, toBlock: 'latest'}; // filter for your address
+const events = myContract.allEvents(filter); // get all events
+console.log(events);
+
