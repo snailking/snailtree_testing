@@ -151,7 +151,7 @@ function date24() {
 
 //Get timestamp for log
 function dateLog(_blockNumber) {
-	d = dateBlock + (_blockNumber * 15 * 1000);
+	d = new Date(dateBlock + (_blockNumber * 15 * 1000));
 	console.log(d);
 	datetext = d.toTimeString();
 	datetext = datetext.split(' ')[0];
