@@ -1196,6 +1196,9 @@ myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error,
 			logboxscroll.scrollTop = logboxscroll.scrollHeight;
 		}
 	}
+	else{
+		console.log("problem!");
+	}
 });
 
 /*
