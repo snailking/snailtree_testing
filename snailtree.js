@@ -147,6 +147,12 @@ function date24() {
 	datetext = datetext.split(' ')[0];
 }
 
+function dateLog(_blockNum) {
+	d = web3.eth.getBlock(_blockNum).timestamp;
+	datetext = d.toTimeString();
+	datetext = datetext.split(' ')[0];
+}
+
 //Unique check for prelaunch
 function checkLaunch(){
 	//var blocktime = Math.round((new Date()).getTime() / 1000); //current blocktime should be Unix timestamp
@@ -1194,7 +1200,7 @@ myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error,
 		var i = 0;
 		for(i = 0; i < result.length; i++){
 			if(checkHash(storetxhash, result[i].transactionHash) != 0) {
-				date24();
+				dateLog(result[i].blockNumber);
 				eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result[i].args.player) + " grew their Tree and won " + result[i].args.pecan + " Pecans. Their boost is " + result[i].args.boost + "x.";
 				logboxscroll.scrollTop = logboxscroll.scrollHeight;
 			}
