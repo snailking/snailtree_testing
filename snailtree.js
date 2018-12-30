@@ -1190,10 +1190,12 @@ claimedshareEvent.watch(function(error, result){
 const myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
 	if(!error){
 		console.log(result);
-		if(checkHash(storetxhash, result.transactionHash) != 0) {
-			date24();
-			eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result.args.player) + " grew their Tree and won " + result.args.pecan + " Pecans. Their boost is " + result.args.boost + "x.";
-			logboxscroll.scrollTop = logboxscroll.scrollHeight;
+		for(i = 0; i < result.length; i++){
+			if(checkHash(storetxhash, result.transactionHash) != 0) {
+				date24();
+				eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result[i].args.player) + " grew their Tree and won " + result[i].args.pecan + " Pecans. Their boost is " + result[i].args.boost + "x.";
+				logboxscroll.scrollTop = logboxscroll.scrollHeight;
+			}
 		}
 	}
 	else{
