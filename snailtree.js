@@ -151,7 +151,7 @@ function date24() {
 //Get timestamp for log
 function dateLog(_blockNumber) {
 	web3.eth.getBlock(_blockNumber, function(error, result){
-		d = result.timestamp;
+		d = new Date(result.timestamp * 1000);
 		console.log(d);
 		datetext = d.toTimeString();
 		datetext = datetext.split(' ')[0];
