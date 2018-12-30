@@ -145,25 +145,7 @@ function date24() {
 	d = new Date();
 	datetext = d.toTimeString();
 	datetext = datetext.split(' ')[0];
-}
-
-//Conversion of blockNumber to date for past logs
-function dateLog(_blockNum) {
-	var d;
-	web3.eth.getBlock(_blockNum).timestamp( function(result) {
-		d = result;
-	});
-	datetext = d.toTimeString();
-	datetext = datetext.split(' ')[0];
-}
-
-//Current pecans for player
-function updatePlayerPecan(){
-	GetPecan(m_account, function(result) {
-		a_playerPecan = result;
-	});
-}		
-
+}	
 
 //Unique check for prelaunch
 function checkLaunch(){
@@ -1205,26 +1187,6 @@ claimedshareEvent.watch(function(error, result){
 	}
 });
 
-
-myContract.GrewTree({}, { fromBlock: 0, toBlock: 'latest' }).get(function(error, result){
-	if(!error){
-		console.log(result);
-		var i = 0;
-		for(i = 0; i < result.length; i++){
-			if(checkHash(storetxhash, result[i].transactionHash) != 0) {
-				dateLog(result[i].blockNumber);
-				eventlogdoc.innerHTML += "<br>[" + datetext + "] " + formatEthAdr(result[i].args.player) + " grew their Tree and won " + result[i].args.pecan + " Pecans. Their boost is " + result[i].args.boost + "x.";
-				logboxscroll.scrollTop = logboxscroll.scrollHeight;
-			}
-		}
-	}
-	else{
-		console.log("problem!");
-	}
-});
-
-	
-/*
 var grewtreeEvent = myContract.GrewTree();
 
 grewtreeEvent.watch(function(error, result){
@@ -1237,7 +1199,23 @@ grewtreeEvent.watch(function(error, result){
 		}
 	}
 });
-*/
+
+myContract.GrewTree({}, { fromBlock: (await web3.eth.getBlockNumber()) - 12000, toBlock: 'latest' }).get(function(error, result){
+	if(!error){
+		//console.log(result);
+		var i = 0;
+		for(i = 0; i < result.length; i++){
+			if(checkHash(storetxhash, result[i].transactionHash) != 0) {
+				eventlogdoc.innerHTML += "<br>[LOG] " + formatEthAdr(result[i].args.player) + " grew their Tree and won " + result[i].args.pecan + " Pecans. Their boost is " + result[i].args.boost + "x.";
+				logboxscroll.scrollTop = logboxscroll.scrollHeight;
+			}
+		}
+	}
+	else{
+		console.log("problem!");
+	}
+});
+
 var wonroundEvent = myContract.WonRound();
 
 wonroundEvent.watch(function(error, result){
@@ -1250,6 +1228,8 @@ wonroundEvent.watch(function(error, result){
 		}
 	}
 });
+
+
 
 var gavepecanEvent = myContract.GavePecan();
 
