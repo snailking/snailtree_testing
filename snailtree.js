@@ -311,7 +311,7 @@ function showLeaderboard() {
 	for(i = 1; i < 6; i++) {
 		for(j = 0; j < 5; j++) {
 			if(d_leaderboard[j].rank == i) {
-				leaderboardArray[i].innerHTML = formatEthAdr(d_leaderboard[j].address) + "<br>" + d_leaderboard[j].tree + " Tree Size <br>" + d_leaderboard[j].pecan + " Pecans <br>";
+				leaderboardArray[i].innerHTML = formatEthAdr(d_leaderboard[j].address) + "<br>" + numberWithSpaces(d_leaderboard[j].tree) + " Tree Size <br>" + numberWithSpaces(d_leaderboard[j].pecan) + " Pecans <br>";
 			}
 		}
 	}
