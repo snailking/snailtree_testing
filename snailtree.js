@@ -176,7 +176,7 @@ function date24() {
 
 //Get timestamp for log
 function dateLog(_blockNumber) {
-	d = new Date((timeLaunch + ((_blockNumber - launchBlock) * 14.6)) * 1000);
+	d = new Date((timeLaunch + ((_blockNumber - launchBlock) * 14.5)) * 1000);
 	console.log(d);
 	datetext = d.toTimeString();
 	datetext = datetext.split(' ')[0];
@@ -263,7 +263,7 @@ function slowUpdate(){
 	computePecanLeft();
 	computeProgressBar();
 	updateText();
-	runLog();
+	//runLog();
 	setTimeout(slowUpdate, 4000);
 }
 
