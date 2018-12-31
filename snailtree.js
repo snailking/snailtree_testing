@@ -1356,7 +1356,7 @@ function runLog(){
 						if(result[i].event == "GavePecan"){
 							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " gave " + numberWithSpaces(result[i].args.pecan) + " Pecans to Wonkers, and got " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH in exchange!";							
 						} else if(result[i].event == "PlantedRoot"){
-							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + numberWithSpaces(result[i].args.treesiz)e + " in size.";
+							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + numberWithSpaces(result[i].args.treesize) + " in size.";
 							e_size.address = result[i].args.player;
 							e_size.tree =  parseInt(result[i].args.treesize);
 							computeLeaderboard();
