@@ -1323,7 +1323,7 @@ function computeLeaderboard() {
 	for(k = 0; k < 5; k++) {
 		if(e_size.address == d_leaderboard[k].address) {
 			d_leaderboard[k].address = e_size.address;
-			d_leaderboard[k].hatchery = e_size.tree;
+			d_leaderboard[k].tree = e_size.tree;
 			notLeader = false;
 		}
 	}
@@ -1331,7 +1331,7 @@ function computeLeaderboard() {
 	var newEntry = false;
 	if(notLeader == true && e_size.tree > lowest) {
 		d_leaderboard[position].address = e_size.address;
-		d_leaderboard[position].hatchery = e_size.tree;
+		d_leaderboard[position].tree = e_size.tree;
 		newEntry = true;
 	}
 }
@@ -1358,7 +1358,7 @@ function runLog(){
 						} else if(result[i].event == "PlantedRoot"){
 							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + result[i].args.treesize + " in size.";
 							e_size.address = result[i].args.player;
-							e_size.tree = result[i].args.treesize;
+							e_size.tree =  parseInt(result[i].args.treesize);
 							computeLeaderboard();
 						} else if(result[i].event == "ClaimedShare"){
 							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " claimed their share worth " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH and got " + result[i].args.pecan + " Pecans.";
