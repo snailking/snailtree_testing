@@ -298,14 +298,20 @@ function refreshDataSlow(){
 	setTimeout(refreshDataSlow, 30000);
 }
 
+var leaderboardArray = [];
+leaderboardArray[0] = 0;
+leaderboardArray[1] = document.getElementById('treelord1');
+leaderboardArray[2] = document.getElementById('treelord2');
+leaderboardArray[3] = document.getElementById('treelord3');
+leaderboardArray[4] = document.getElementById('treelord4');
+leaderboardArray[5] = document.getElementById('treelord5');
+
 //Show Leaderboard
 function showLeaderboard() {
-	var leaderboarddoc = document.getElementById('leaderboard');
-	leaderboarddoc.innerHTML = "";
 	for(i = 1; i < 6; i++) {
 		for(j = 0; j < 5; j++) {
 			if(d_leaderboard[j].rank == i) {
-				leaderboarddoc.innerHTML += "#" + d_leaderboard[j].rank + " | " + formatEthAdr(d_leaderboard[j].address) + " | " + d_leaderboard[j].tree + " Tree Size | " + d_leaderboard[j].pecan + " Pecans <br>";
+				leaderboardArray[i].innerHTML += formatEthAdr(d_leaderboard[j].address) + "<br>" + d_leaderboard[j].tree + " Tree Size <br>" + d_leaderboard[j].pecan + " Pecans <br>";
 			}
 		}
 	}
@@ -1328,7 +1334,6 @@ function computeLeaderboard() {
 		d_leaderboard[position].hatchery = e_size.tree;
 		newEntry = true;
 	}
-	showLeaderboard();
 }
 
 /* EVENTS */
@@ -1352,6 +1357,7 @@ function runLog(){
 							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " gave " + result[i].args.pecan + " Pecans to Wonkers, and got " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH in exchange!";							
 						} else if(result[i].event == "PlantedRoot"){
 							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + result[i].args.treesize + " in size.";
+							computeLeaderboard();
 						} else if(result[i].event == "ClaimedShare"){
 							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " claimed their share worth " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH and got " + result[i].args.pecan + " Pecans.";
 						} else if(result[i].event == "GrewTree"){
