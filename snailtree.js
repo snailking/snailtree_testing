@@ -1346,6 +1346,22 @@ var e_size = { address: "", tree: 0 };
 function runLog(){
 	if(ranLog == false && twoDaysBlock > 0){
 		ranLog = true;
+		myContract.PlantedRoot({ fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
+			if(!error){
+				console.log(result);
+				var j = 0;
+				for(j = 0; j < result.length; j++){
+					if(checkHash(storetxhash, result[j].transactionHash) != 0) {
+						e_size.address = result[j].args.player;
+						e_size.tree =  parseInt(result[j].args.treesize);
+						computeLeaderboard();
+					}
+				}
+			}
+			else{
+				console.log("problem!");
+			}
+		});
 		myContract.allEvents({ fromBlock: twoDaysBlock, toBlock: 'latest' }).get(function(error, result){
 			if(!error){
 				console.log(result);
@@ -1357,9 +1373,6 @@ function runLog(){
 							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " gave " + numberWithSpaces(result[i].args.pecan) + " Pecans to Wonkers, and got " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH in exchange!";							
 						} else if(result[i].event == "PlantedRoot"){
 							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + numberWithSpaces(result[i].args.treesize) + " in size.";
-							e_size.address = result[i].args.player;
-							e_size.tree =  parseInt(result[i].args.treesize);
-							computeLeaderboard();
 						} else if(result[i].event == "ClaimedShare"){
 							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " claimed their share worth " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH and got " + numberWithSpaces(result[i].args.pecan) + " Pecans.";
 						} else if(result[i].event == "GrewTree"){
