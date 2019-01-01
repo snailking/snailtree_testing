@@ -1346,7 +1346,7 @@ var e_size = { address: "", tree: 0 };
 function runLog(){
 	if(ranLog == false && twoDaysBlock > 0){
 		ranLog = true;
-		myContract.PlantedRoot({ fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
+		myContract.PlantedRoot({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
 			if(!error){
 				console.log(result);
 				var j = 0;
