@@ -3,6 +3,7 @@ var contractAddress="0x1199e1C21C89bF9653DC2996fed7168A6B587655";
 /* WEB3 DETECTION */
 var web3;
 
+/* OLD
 window.addEventListener("load", function() {
 	if (typeof web3 !== "undefined") {
         web3 = new Web3(web3.currentProvider);
@@ -21,6 +22,34 @@ window.addEventListener("load", function() {
         //////console.log("Web3 library not found.");
 		//modal2.style.display = "block";
         web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/f423492af8504d94979d522c3fbf3794"));
+    }
+});
+*/
+
+/* NEW */
+
+window.addEventListener('load', async () => {
+    // Modern dapp browsers...
+    if (window.ethereum) {
+        window.web3 = new Web3(ethereum);
+        try {
+            // Request account access if needed
+            await ethereum.enable();
+            // Acccounts now exposed
+            web3.eth.sendTransaction({/* ... */});
+        } catch (error) {
+            // User denied account access...
+        }
+    }
+    // Legacy dapp browsers...
+    else if (window.web3) {
+        window.web3 = new Web3(web3.currentProvider);
+        // Acccounts always exposed
+        web3.eth.sendTransaction({/* ... */});
+    }
+    // Non-dapp browsers...
+    else {
+        console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
     }
 });
 
@@ -1346,7 +1375,7 @@ var e_size = { address: "", tree: 0 };
 function runLog(){
 	if(ranLog == false && twoDaysBlock > 0){
 		ranLog = true;
-		myContract.PlantedRoot({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){
+		myContract.PlantedRoot({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){ // don't forget that extra {} parameter for individual events
 			if(!error){
 				console.log(result);
 				var j = 0;
