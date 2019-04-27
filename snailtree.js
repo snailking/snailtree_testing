@@ -337,9 +337,7 @@ leaderboardArray[4] = document.getElementById('treelord5');
 //Show Leaderboard
 function showLeaderboard() {
 	for(i = 0; i < 5; i++) {
-		if(d_leaderboard[j].rank == i) {
-			leaderboardArray[i].innerHTML = formatEthAdr(d_leaderboard[j].address) + "<br>" + numberWithSpaces(d_leaderboard[j].tree) + " Tree Size <br>" + numberWithSpaces(d_leaderboard[j].pecan) + " Pecans <br>";
-		}
+		leaderboardArray[i].innerHTML = formatEthAdr(d_leaderboard[i].address) + "<br>" + numberWithSpaces(d_leaderboard[i].tree) + " Tree Size <br>" + numberWithSpaces(d_leaderboard[i].pecan) + " Pecans <br>";
 	}
 }
 
