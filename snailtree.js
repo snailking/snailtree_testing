@@ -3,31 +3,6 @@ var contractAddress="0x1199e1C21C89bF9653DC2996fed7168A6B587655";
 /* WEB3 DETECTION */
 var web3;
 
-/* OLD
-window.addEventListener("load", function() {
-	if (typeof web3 !== "undefined") {
-        web3 = new Web3(web3.currentProvider);
-        web3.version.getNetwork(function(error, result) {
-            if (!error) {
-                if (result == "1") {
-					//////console.log("Mainnet successfully loaded!");
-                } else {
-                    //////console.log("You must be on the Testnet to play SnailFarm 3!");
-					web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/f423492af8504d94979d522c3fbf3794"));
-					//modal2.style.display = "block";
-                }
-            }
-        });
-    } else {
-        //////console.log("Web3 library not found.");
-		//modal2.style.display = "block";
-        web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/f423492af8504d94979d522c3fbf3794"));
-    }
-});
-*/
-
-/* NEW */
-
 window.addEventListener('load', async () => {
     // Modern dapp browsers...
     if (window.ethereum) {
@@ -45,7 +20,7 @@ window.addEventListener('load', async () => {
     else if (window.web3) {
         window.web3 = new Web3(web3.currentProvider);
         // Acccounts always exposed
-        web3.eth.sendTransaction({/* ... */});
+        //web3.eth.sendTransaction({/* ... */});
     }
     // Non-dapp browsers...
     else {
@@ -92,13 +67,13 @@ var launchBlock = 6974738;
 
 var startBlock = 0;
 var ranLog = false;
-
+/*
 function checkBlock(){
 	web3.eth.getBlockNumber(function (error, result){
 		startBlock = result - 48000;
 	});
 }
-
+*/
 checkBlock();
 
 /* VARIABLES */
@@ -1391,9 +1366,6 @@ function runLog(){
 								eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " claimed their share worth " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH and got " + numberWithSpaces(result[i].args.pecan) + " Pecans.";
 							} else if(result[i].event == "GrewTree"){
 								eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " grew their Tree and won " + numberWithSpaces(result[i].args.pecan) + " Pecans. Their boost is " + result[i].args.boost + "x.";
-								e_size.address = result[i].args.player;
-								e_size.tree =  parseInt(result[i].args.treesize);
-								computeLeaderboard();
 							} else if(result[i].event == "WithdrewBalance"){
 								eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " withdrew " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH from their balance.";
 							} else if(result[i].event == "PaidThrone"){
