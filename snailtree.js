@@ -132,6 +132,9 @@ var f_root;
 
 var m_account = "waiting for web3";
 
+var u_updateEvent = false;
+var p_keepUpdating = false;
+
 var doc_contractBalance = document.getElementById('contractbalance');
 var doc_gameRound = document.getElementById('gameround');
 var doc_roundPot = document.getElementById('roundpot');
