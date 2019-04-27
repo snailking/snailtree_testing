@@ -163,9 +163,9 @@ var doc_boostReady = document.getElementById('boostready');
 //Leaderboard Array
 
 var d_leaderboard = [
-	{ address: "0x0000000022223333444455556666777788889999", tree: 0, pecan: 0 },
-	{ address: "0x0000111122223333444455556666777788889999", tree: 0, pecan: 0 },
-	{ address: "0x0000222222223333444455556666777788889999", tree: 0, pecan: 0 },
+	{ address: "0x0000000022223333444455556666777788889999", tree: 0, pecan: 0},
+	{ address: "0x0000111122223333444455556666777788889999", tree: 0, pecan: 0},
+	{ address: "0x0000222222223333444455556666777788889999", tree: 0, pecan: 0},
 	{ address: "0x0000333322223333444455556666777788889999", tree: 0, pecan: 0},
 	{ address: "0x0000444422223333444455556666777788889999", tree: 0, pecan: 0}
 ];	
@@ -1340,7 +1340,7 @@ function computeLeaderboard() {
 	isLeader = false;
 	for(k = 0; k < d_leaderboard.length; k++){
 		if(e_size.address == d_leaderboard[k].address){
-			d_leaderboard[k].hatchery = e_size.tree;
+			d_leaderboard[k].tree = e_size.tree;
 			isLeader = true;
 		}
 	}
