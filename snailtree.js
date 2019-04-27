@@ -90,12 +90,12 @@ window.onclick = function(event) {
 var timeLaunch = 1546099245;
 var launchBlock = 6974738;
 
-var twoDaysBlock = 0;
+var startBlock = 0;
 var ranLog = false;
 
 function checkBlock(){
 	web3.eth.getBlockNumber(function (error, result){
-		twoDaysBlock = result - 12000;
+		startBlock = result - 48000;
 	});
 }
 
