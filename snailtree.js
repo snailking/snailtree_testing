@@ -292,6 +292,7 @@ function slowUpdate(){
 	computePecanLeft();
 	computeProgressBar();
 	updateText();
+	updateLog();
 	//runLog();
 	setTimeout(slowUpdate, 4000);
 }
@@ -409,6 +410,18 @@ function checkLeaderPecan4(){
 	GetPecan(d_leaderboard[4].address, function(result) {
 		d_leaderboard[4].pecan = result;
 	});
+}
+
+//Changes u_updateLog to true, manual choice in case event watching fails
+function startLogging(){
+	u_updateEvent = true;
+}
+
+//Update log every few seconds if player chose to
+function updateLog(){
+	if(u_updateEvent == true || p_keepUpdating == true){
+		runLog();
+	}
 }
 
 //Updates all text from web3 calls
