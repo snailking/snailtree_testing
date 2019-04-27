@@ -65,7 +65,7 @@ window.onclick = function(event) {
 var timeLaunch = 1546099245;
 var launchBlock = 6974738;
 
-var startBlock = 0;
+var startBlock = launchBlock;
 var ranLog = false;
 /*
 function checkBlock(){
@@ -316,7 +316,7 @@ leaderboardArray[4] = document.getElementById('treelord5');
 //Show Leaderboard
 function showLeaderboard() {
 	for(i = 0; i < 5; i++) {
-		leaderboardArray[i].innerHTML = formatEthAdr(d_leaderboard[i].address) + "<br>" + /*numberWithSpaces*/(d_leaderboard[i].tree) + " Tree Size <br>" + /*numberWithSpaces*/(d_leaderboard[i].pecan) + " Pecans <br>";
+		leaderboardArray[i].innerHTML = formatEthAdr(d_leaderboard[i].address) + "<br>" + numberWithSpaces(d_leaderboard[i].tree) + " Tree Size <br>" + numberWithSpaces(d_leaderboard[i].pecan) + " Pecans <br>";
 	}
 }
 
