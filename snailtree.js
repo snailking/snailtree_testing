@@ -73,9 +73,9 @@ function checkBlock(){
 		startBlock = result - 48000;
 	});
 }
-*/
-checkBlock();
 
+checkBlock();
+*/
 /* VARIABLES */
 
 var timeNow;
