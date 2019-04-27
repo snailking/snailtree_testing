@@ -163,11 +163,11 @@ var doc_boostReady = document.getElementById('boostready');
 //Leaderboard Array
 
 var d_leaderboard = [
-	{ address: "0x0000000022223333444455556666777788889999", tree: 0, pecan: 0, rank: 1 },
-	{ address: "0x0000111122223333444455556666777788889999", tree: 0, pecan: 0, rank: 2 },
-	{ address: "0x0000222222223333444455556666777788889999", tree: 0, pecan: 0, rank: 3 },
-	{ address: "0x0000333322223333444455556666777788889999", tree: 0, pecan: 0, rank: 4 },
-	{ address: "0x0000444422223333444455556666777788889999", tree: 0, pecan: 0, rank: 5 }
+	{ address: "0x0000000022223333444455556666777788889999", tree: 0, pecan: 0 },
+	{ address: "0x0000111122223333444455556666777788889999", tree: 0, pecan: 0 },
+	{ address: "0x0000222222223333444455556666777788889999", tree: 0, pecan: 0 },
+	{ address: "0x0000333322223333444455556666777788889999", tree: 0, pecan: 0},
+	{ address: "0x0000444422223333444455556666777788889999", tree: 0, pecan: 0}
 ];	
 
 /* UTILITIES */
@@ -322,51 +322,32 @@ function refreshDataSlow(){
 	checkLeaderPecan4();
 	
 	slowupdateLeaderboard();
-	showLeaderboard();
+	//showLeaderboard();
 	
 	setTimeout(refreshDataSlow, 30000);
 }
 
 var leaderboardArray = [];
-leaderboardArray[0] = 0;
-leaderboardArray[1] = document.getElementById('treelord1');
-leaderboardArray[2] = document.getElementById('treelord2');
-leaderboardArray[3] = document.getElementById('treelord3');
-leaderboardArray[4] = document.getElementById('treelord4');
-leaderboardArray[5] = document.getElementById('treelord5');
+leaderboardArray[0] = document.getElementById('treelord1');
+leaderboardArray[1] = document.getElementById('treelord2');
+leaderboardArray[2] = document.getElementById('treelord3');
+leaderboardArray[3] = document.getElementById('treelord4');
+leaderboardArray[4] = document.getElementById('treelord5');
 
 //Show Leaderboard
 function showLeaderboard() {
-	for(i = 1; i < 6; i++) {
-		for(j = 0; j < 5; j++) {
-			if(d_leaderboard[j].rank == i) {
-				leaderboardArray[i].innerHTML = formatEthAdr(d_leaderboard[j].address) + "<br>" + numberWithSpaces(d_leaderboard[j].tree) + " Tree Size <br>" + numberWithSpaces(d_leaderboard[j].pecan) + " Pecans <br>";
-			}
+	for(i = 0; i < 5; i++) {
+		if(d_leaderboard[j].rank == i) {
+			leaderboardArray[i].innerHTML = formatEthAdr(d_leaderboard[j].address) + "<br>" + numberWithSpaces(d_leaderboard[j].tree) + " Tree Size <br>" + numberWithSpaces(d_leaderboard[j].pecan) + " Pecans <br>";
 		}
 	}
 }
 
 //Update for Leaderboard checking every address
 function slowupdateLeaderboard() {	
-	//Loop through Trees and store top ones to assign ranks
-	var avoidNext = [0, 0, 0, 0, 0];
-	for(k = 1; k < 6; k++) {
-		var topTree = -1;
-		var topGuy = 0;
-		for(j = 0; j < 5; j++) {
-			if(avoidNext[j] != 1){
-				//console.log("avoidNext[" + j + "] evaluated to != 1");
-				if(d_leaderboard[j].tree > topTree){
-					topTree = d_leaderboard[j].tree;
-					topGuy = j;
-				}
-			}
-		}
-		d_leaderboard[topGuy].rank = k;
-		//console.log("New rank " + k + " : " + d_leaderboard[topGuy].address);
-		avoidNext[topGuy] = 1;
-		//console.log("Next time, avoid indice " + topGuy);
-	}
+	d_leaderboard.sort(function (a, b) {
+		return b.hatchery - a.hatchery;
+	});
 	
 	showLeaderboard();
 }
@@ -1311,57 +1292,57 @@ function ClaimShare(callback){
 
 /* EVENT WATCH */
 
-//Store transaction hash for each event, and check before executing result, as web3 events fire twice
-var storetxhash = [];
+//Store transaction hash and event name for each event, and check before executing result, as web3 events fire twice (metamask?)
+var store_hash = [];
+var store_event = [];
 
-//Check equivalency
-function checkHash(txarray, txhash) {
+function checkHash(txhash, eventname) {
 	var i = 0;
+	var _name = false;
 	do {
-		if(txarray[i] == txhash) {
-			return 0;
+		if(store_hash[i] == txhash) {
+			if(store_event[i] == eventname) {
+				return 0;
+			}
 		}
 		i++;
 	}
-	while(i < txarray.length);
-	//Add new tx hash
-	txarray.push(txhash);
-	//Remove first tx hash if there's more than 16 hashes saved
-	if(txarray.length > 16) {
-		txarray.shift();
+	while(i < store_event.length);
+	
+	//Add new tx hash and event name
+	store_hash.push(txhash);
+	store_event.push(eventname);
+	
+	//Remove first entry if there's more than 8 entries saved
+	if(store_hash.length > 8){
+		store_hash.shift();
+	}
+	if(store_event.length > 8){
+		store_event.shift();
 	}
 }
 
-//Compute Leaderboard
-
+//Compute Leaderboard 2
 function computeLeaderboard() {
-	var lowest = d_leaderboard[0].tree;
-	var position = 0; 
 	
-	//Check lowest leader
-	var i = 0;
-	for(i = 0; i < 5; i++) {
-		if(d_leaderboard[i].tree < lowest) {
-			lowest = d_leaderboard[i].tree;
-			position = i;
+	//check address isn't already on leaderboard
+	isLeader = false;
+	for(k = 0; k < d_leaderboard.length; k++){
+		if(e_size.address == d_leaderboard[k].address){
+			d_leaderboard[k].hatchery = e_size.tree;
+			isLeader = true;
 		}
 	}
 	
-	//Check if hatcher is already on leaderboard, then check if hatcher can replace lowest
-	var notLeader = true;
-	for(k = 0; k < 5; k++) {
-		if(e_size.address == d_leaderboard[k].address) {
-			d_leaderboard[k].address = e_size.address;
-			d_leaderboard[k].tree = e_size.tree;
-			notLeader = false;
-		}
-	}
-
-	var newEntry = false;
-	if(notLeader == true && e_size.tree > lowest) {
-		d_leaderboard[position].address = e_size.address;
-		d_leaderboard[position].tree = e_size.tree;
-		newEntry = true;
+	if(isLeader == false){
+		//else, push new leader
+		d_leaderboard.push(e_size);
+		//sort leaderboard
+		d_leaderboard.sort(function (a, b) {
+			return b.tree - a.tree;
+		});
+		//remove lowest leader
+		d_leaderboard.pop();
 	}
 }
 
@@ -1373,55 +1354,48 @@ var eventlogdoc = document.getElementById("eventlog");
 var e_size = { address: "", tree: 0 };
 
 function runLog(){
-	if(ranLog == false && twoDaysBlock > 0){
-		ranLog = true;
-		myContract.PlantedRoot({}, { fromBlock: launchBlock, toBlock: 'latest' }).get(function(error, result){ // don't forget that extra {} parameter for individual events
-			if(!error){
-				console.log(result);
-				var j = 0;
-				for(j = 0; j < result.length; j++){
-					if(checkHash(storetxhash, result[j].transactionHash) != 0) {
-						e_size.address = result[j].args.player;
-						e_size.tree =  parseInt(result[j].args.treesize);
-						computeLeaderboard();
-					}
-				}
-			}
-			else{
-				console.log("problem!");
-			}
-		});
-		myContract.allEvents({ fromBlock: twoDaysBlock, toBlock: 'latest' }).get(function(error, result){
-			if(!error){
-				console.log(result);
-				var i = 0;
-				for(i = 0; i < result.length; i++){
-					if(checkHash(storetxhash, result[i].transactionHash) != 0) {
-						dateLog(result[i].blockNumber);
-						if(result[i].event == "GavePecan"){
-							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " gave " + numberWithSpaces(result[i].args.pecan) + " Pecans to Wonkers, and got " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH in exchange!";							
-						} else if(result[i].event == "PlantedRoot"){
-							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + numberWithSpaces(result[i].args.treesize) + " in size.";
-						} else if(result[i].event == "ClaimedShare"){
-							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " claimed their share worth " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH and got " + numberWithSpaces(result[i].args.pecan) + " Pecans.";
-						} else if(result[i].event == "GrewTree"){
-							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " grew their Tree and won " + numberWithSpaces(result[i].args.pecan) + " Pecans. Their boost is " + result[i].args.boost + "x.";
-						} else if(result[i].event == "WithdrewBalance"){
-							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " withdrew " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH from their balance.";
-						} else if(result[i].event == "PaidThrone"){
-							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " paid tribute to the SnailThrone! " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH have been sent.";
-						} else if(result[i].event == "BoostedPot"){
-							eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " makes a generous " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH donation to the JackPot.";
+	ranLog = true;
+	myContract.allEvents({ fromBlock: startBlock, toBlock: 'latest' }).get(function(error, result){
+		if(!error){
+			////////console.log(result);
+			var i = 0;
+			if(result.length > 0){ //check if we have events, if not stop the loop
+				p_keepUpdating = true;
+				for(i = 0; i < 40; i++){ //loop through only 40 events at most
+					if(i < result.length){ //make sure there's enough events
+						if(checkHash(result[i].transactionHash, result[i].event) != 0) {
+							startBlock = result[i].blockNumber; //store the last blocknumber to start next loop
+							dateLog(result[i].blockNumber);
+							if(result[i].event == "GavePecan"){
+								eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " gave " + numberWithSpaces(result[i].args.pecan) + " Pecans to Wonkers, and got " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH in exchange!";							
+							} else if(result[i].event == "PlantedRoot"){
+								eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " planted a root with " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH. Their tree reaches " + numberWithSpaces(result[i].args.treesize) + " in size.";
+								e_size.address = result[i].args.player;
+								e_size.tree =  parseInt(result[i].args.treesize);
+								computeLeaderboard();
+							} else if(result[i].event == "ClaimedShare"){
+								eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " claimed their share worth " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH and got " + numberWithSpaces(result[i].args.pecan) + " Pecans.";
+							} else if(result[i].event == "GrewTree"){
+								eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " grew their Tree and won " + numberWithSpaces(result[i].args.pecan) + " Pecans. Their boost is " + result[i].args.boost + "x.";
+							} else if(result[i].event == "WithdrewBalance"){
+								eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " withdrew " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH from their balance.";
+							} else if(result[i].event == "PaidThrone"){
+								eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " paid tribute to the SnailThrone! " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH have been sent.";
+							} else if(result[i].event == "BoostedPot"){
+								eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " makes a generous " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH donation to the JackPot.";
+							}
+							logboxscroll.scrollTop = logboxscroll.scrollHeight;
 						}
-					logboxscroll.scrollTop = logboxscroll.scrollHeight;
-					}
+					}	
 				}
+			} else {
+				p_keepUpdating = false;
 			}
-			else{
-				console.log("problem!");
-			}
-		});
-	}
+		}
+		else{
+			//////////console.log("problem!");
+		}
+	});
 }
 
 var plantedrootEvent = myContract.PlantedRoot();
