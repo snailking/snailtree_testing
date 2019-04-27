@@ -341,7 +341,7 @@ leaderboardArray[4] = document.getElementById('treelord5');
 //Show Leaderboard
 function showLeaderboard() {
 	for(i = 0; i < 5; i++) {
-		leaderboardArray[i].innerHTML = formatEthAdr(d_leaderboard[i].address) + "<br>" + numberWithSpaces(d_leaderboard[i].tree) + " Tree Size <br>" + numberWithSpaces(d_leaderboard[i].pecan) + " Pecans <br>";
+		leaderboardArray[i].innerHTML = formatEthAdr(d_leaderboard[i].address) + "<br>" + /*numberWithSpaces*/(d_leaderboard[i].tree) + " Tree Size <br>" + /*numberWithSpaces*/(d_leaderboard[i].pecan) + " Pecans <br>";
 	}
 }
 
@@ -1365,7 +1365,7 @@ function computeLeaderboard() {
 var logboxscroll = document.getElementById('logboxscroll');
 var eventlogdoc = document.getElementById("eventlog");
 
-var e_size = { address: "", tree: 0 };
+var e_size = { address: "", tree: 0, pecan: 0 };
 
 function runLog(){
 	ranLog = true;
@@ -1391,6 +1391,9 @@ function runLog(){
 								eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " claimed their share worth " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH and got " + numberWithSpaces(result[i].args.pecan) + " Pecans.";
 							} else if(result[i].event == "GrewTree"){
 								eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " grew their Tree and won " + numberWithSpaces(result[i].args.pecan) + " Pecans. Their boost is " + result[i].args.boost + "x.";
+								e_size.address = result[i].args.player;
+								e_size.tree =  parseInt(result[i].args.treesize);
+								computeLeaderboard();
 							} else if(result[i].event == "WithdrewBalance"){
 								eventlogdoc.innerHTML += "<br>[~" + datetext + "] " + formatEthAdr(result[i].args.player) + " withdrew " + formatEthValue2(web3.fromWei(result[i].args.eth,'ether')) + " ETH from their balance.";
 							} else if(result[i].event == "PaidThrone"){
